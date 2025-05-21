@@ -11,15 +11,16 @@
     {% for error in form.name.errors %}
     <small class="text-danger">{{ error }}</small>
     {% endfor %}
-    {{ form.name }}
     <small class="error-message" id="nameError"></small>
+    {{ form.name }}
+
 
     <label for="phone">Phone</label>
     {% for error in form.phone.errors %}
     <small class="text-danger">{{ error }}</small>
     {% endfor %}
-    {{ form.phone }}
     <small class="error-message" id="phoneStatus"></small>
+    {{ form.phone }}
 
     <label for="email">Email</label>
     {% for error in form.email.errors %}
@@ -33,7 +34,7 @@
     {% for error in form.username.errors %}
     <small class="text-danger">{{ error }}</small>
     {% endfor %}
-    <small class="text-danger" id="usernameStatus"></small>
+    <small id="usernameStatus"></small>
     {{ form.username }}
 
 
@@ -77,41 +78,89 @@
 <script src="{% static 'users/js/script.js' %}"></script>
  <script>
      document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("username").addEventListener("input", () => {
-  const username = document.getElementById("username").value;
-  if (username.length > 3 && username.length < 10) {
-    fetch(`/ajax/check-username/?username=${username}`)
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("usernameStatus").textContent = data.exists ? "Username taken" : "Username available";
-      });
-  } else {
-    document.getElementById("usernameStatus").textContent = "Username must be 4-9 characters.";
+  // Debounce function to limit API calls
+  function debounce(func, delay) {
+    let timer;
+    return function(...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
   }
-});
 
-document.getElementById("email").addEventListener("input", () => {
-  const email = document.getElementById("email").value;
-  fetch(`/ajax/check-email/?email=${email}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("emailStatus").textContent = data.exists ? "Email already in use" : "";
-    });
-});
+  // Username validation with debounce
+  const usernameInput = document.getElementById("username");
+  const usernameStatus = document.getElementById("usernameStatus");
 
-document.getElementById("phone").addEventListener("input", () => {
-  const phone = document.getElementById("phone").value;
-  if (phone.length == 10 ){
-  fetch(`/ajax/check-phone/?phone=${phone}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("phoneStatus").textContent = data.exists ? "Phone number already registered" : "";
-    });
-    }else {
-      document.getElementById("phoneStatus").textContent = "enter a valid number";
+  const validateUsername = debounce((username) => {
+    if (username.length > 3 && username.length < 10) {
+      fetch(`/ajax/check-username/?username=${username}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.exists) {
+            usernameStatus.textContent = "Username taken";
+            usernameStatus.style.color = "red"; // Red for taken username
+          } else {
+            usernameStatus.textContent = "Username available";
+            usernameStatus.style.color = "green"; // Green for available username
+          }
+        });
+    } else {
+      usernameStatus.textContent = "Username must be 4-9 characters.";
+      usernameStatus.style.color = ""; // Reset to default color
     }
-});
+  }, 500); // 500ms debounce delay
 
+  usernameInput.addEventListener("input", () => {
+    const username = usernameInput.value;
+    validateUsername(username);
+  });
+
+  // Email validation with debounce
+  const emailInput = document.getElementById("email");
+  const emailStatus = document.getElementById("emailStatus");
+
+  const validateEmail = debounce((email) => {
+    if (email) { // Only make the request if there's an email value
+      fetch(`/ajax/check-email/?email=${email}`)
+        .then(res => res.json())
+        .then(data => {
+          emailStatus.textContent = data.exists ? "Email already in use" : "";
+          emailStatus.style.color = data.exists ? "red" : ""; // Red for taken email
+        });
+    } else {
+      emailStatus.textContent = "";
+    }
+  }, 500); // 500ms debounce delay
+
+  emailInput.addEventListener("input", () => {
+    const email = emailInput.value;
+    validateEmail(email);
+  });
+
+  // Phone validation with debounce
+  const phoneInput = document.getElementById("phone");
+  const phoneStatus = document.getElementById("phoneStatus");
+
+  const validatePhone = debounce((phone) => {
+    if (phone.length === 10) {
+      fetch(`/ajax/check-phone/?phone=${phone}`)
+        .then(res => res.json())
+        .then(data => {
+          phoneStatus.textContent = data.exists ? "Phone number already registered" : "";
+          phoneStatus.style.color = data.exists ? "red" : ""; // Red for taken phone
+        });
+    } else {
+      phoneStatus.textContent = phone ? "Enter a valid number" : "";
+      phoneStatus.style.color = phone ? "red" : ""; // Red for invalid phone
+    }
+  }, 500); // 500ms debounce delay
+
+  phoneInput.addEventListener("input", () => {
+    const phone = phoneInput.value;
+    validatePhone(phone);
+  });
 });
 </script>
 {% endblock %}

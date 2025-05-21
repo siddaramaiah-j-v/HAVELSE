@@ -15,6 +15,10 @@ def check_username(request):
     exists = User.objects.filter(username=username).exists()
     return JsonResponse({'exists': exists})
 
+def check_phone(request):
+    phone = request.GET.get('phone')
+    exists = Profile.objects.filter(phone=phone).exists()
+    return JsonResponse({'exists': exists})
 
 def check_email(request):
     email = request.GET.get('email')
