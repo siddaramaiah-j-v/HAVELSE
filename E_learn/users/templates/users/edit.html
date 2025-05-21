@@ -1,0 +1,230 @@
+{% extends 'learn/base.html' %}
+{% load static %}
+{% block title %}HAVELSE - Edit Profile{% endblock %}
+{% block style %}
+/* Profile Edit Page Specific Styles */
+.profile-edit-container {
+    margin-top: 7rem;
+    margin-bottom: 3rem;
+}
+
+.profile-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.profile-header {
+    background-color: #1f4037;
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+}
+
+.form-control {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: #99BC85;
+    box-shadow: 0 0 0 0.25rem rgba(153, 188, 133, 0.25);
+}
+
+.profile-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+}
+
+.btn-upload {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.btn-upload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.btn-success {
+    background-color: #99BC85;
+    border-color: #99BC85;
+    transition: all 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #7d9e6c;
+    border-color: #7d9e6c;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    transition: all 0.3s;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+}
+
+.form-label {
+    font-weight: 500;
+    color: #1f4037;
+}
+
+.form-text {
+    color: #666;
+}
+
+/* Preview image upload */
+#imagePreview {
+    margin-top: 10px;
+    display: none;
+}
+
+/* Card animation */
+.profile-card {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+{% endblock %}
+{% block content %}
+    <!-- Edit Profile Section -->
+<div class="container profile-edit-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h2><i class="fas fa-user-edit me-2"></i>Edit Your Profile</h2>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <div class="profile-image-container">
+                            <img src="{{ user.profile.image.url }}" alt="Profile Image" class="profile-image" id="profileDisplay">
+                            <div class="mt-3">
+                                <label class="btn btn-outline-primary btn-upload">
+                                    <i class="fas fa-upload me-2"></i>Upload New Image
+                                    <input type="file" name="image" id="imageInput" accept="image/*" onchange="displayImage(this)">
+                                </label>
+                                <div class="form-text">Current image will be kept if no new image is selected</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" value="{{user.username}}" disabled>
+                                <div class="form-text">Username cannot be changed.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" value="{{user.profile.email}}" disabled>
+                                <div class="form-text">Email cannot be changed.</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ user.profile.name }}" required maxlength="10">
+                                <div class="form-text">Maximum 10 characters</div>
+                                <div class="form-text">{{form.name.errors}}</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Gender</label>
+                                {{ form.gender }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" value="{{ user.profile.phone }}" disabled>
+                                <div class="form-text">Phone cannot be changed</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3" maxlength="50">{{ user.profile.bio }}</textarea>
+                            <div class="form-text">Tell us about yourself (maximum 50 characters)</div>
+                            <div class="form-text">{{ form.bio.errors }}</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <a href="{% url 'learn:home' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+        // Preview image before upload
+        function displayImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.getElementById('profileDisplay').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+{% endblock %}

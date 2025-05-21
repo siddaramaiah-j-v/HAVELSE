@@ -1,0 +1,117 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block title %}Signup{% endblock %}
+{% block content %}
+<div class="signup-container">
+<h1>Signup</h1>
+<form id="regForm" method='POST' novalidate>
+  {% csrf_token %}
+    {{ form.non_field_errors }}
+    <label for="name">Name</label>
+    {% for error in form.name.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    {{ form.name }}
+    <small class="error-message" id="nameError"></small>
+
+    <label for="phone">Phone</label>
+    {% for error in form.phone.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    {{ form.phone }}
+    <small class="error-message" id="phoneStatus"></small>
+
+    <label for="email">Email</label>
+    {% for error in form.email.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    <small class="text-danger" id="emailStatus"></small>
+    {{ form.email }}
+
+
+    <label for="username">Username</label>
+    {% for error in form.username.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    <small class="text-danger" id="usernameStatus"></small>
+    {{ form.username }}
+
+
+    <label for="password1">Password</label>
+    {% for error in form.password1.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    <small class="text-danger" id="password1Error"></small>
+    <div style="position: relative;">
+        {{ form.password1 }}
+        <img id="togglePassword1" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
+    </div>
+
+    <label for="password2">Confirm Password</label>
+    {% for error in form.password2.errors %}
+    <small class="text-danger">{{ error }}</small>
+    {% endfor %}
+    <small class="text-danger" id="passwordError"></small>
+    <div style="position: relative;">
+        {{ form.password2 }}
+        <img id="togglePassword2" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
+    </div>
+    <button type="submit" class="signupbtn">Signup</button>
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+        {% endif %}
+    {% if messages %}
+    <div class="messages">
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    </div>
+{% endif %}
+    </form>
+<div class="footer">
+    <p><b>Already have an account?</b> <a href="{% url 'login' %}"><b>Login</b></a></p>
+</div>
+</div>
+<script src="{% static 'users/js/script.js' %}"></script>
+ <script>
+     document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("username").addEventListener("input", () => {
+  const username = document.getElementById("username").value;
+  if (username.length > 3 && username.length < 10) {
+    fetch(`/ajax/check-username/?username=${username}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("usernameStatus").textContent = data.exists ? "Username taken" : "Username available";
+      });
+  } else {
+    document.getElementById("usernameStatus").textContent = "Username must be 4-9 characters.";
+  }
+});
+
+document.getElementById("email").addEventListener("input", () => {
+  const email = document.getElementById("email").value;
+  fetch(`/ajax/check-email/?email=${email}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("emailStatus").textContent = data.exists ? "Email already in use" : "";
+    });
+});
+
+document.getElementById("phone").addEventListener("input", () => {
+  const phone = document.getElementById("phone").value;
+  if (phone.length == 10 ){
+  fetch(`/ajax/check-phone/?phone=${phone}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("phoneStatus").textContent = data.exists ? "Phone number already registered" : "";
+    });
+    }else {
+      document.getElementById("phoneStatus").textContent = "enter a valid number";
+    }
+});
+
+});
+</script>
+{% endblock %}

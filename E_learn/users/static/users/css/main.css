@@ -1,0 +1,115 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1f4037, #99f2c8);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+.login-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 1s ease-in-out;
+}
+.signup-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+h1 {
+    text-align: center;
+    color: #1f4037;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+.form-control {
+    border: 2px solid #1f4037;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
+}
+.form-control:focus {
+    border-color: #99f2c8;
+    box-shadow: 0 0 10px rgba(31, 64, 55, 0.2);
+}
+.signupbtn {
+    background: linear-gradient(135deg, #1f4037, #99f2c8);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+.signupbtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(31, 64, 55, 0.3);
+
+}
+
+.loginbtn {
+    background: linear-gradient(135deg, #1f4037, #99f2c8);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.loginbtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(31, 64, 55, 0.3);
+}
+.footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #1f4037;
+}
+.footer a {
+    color: #1f4037;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    color: #792d2d;
+
+}
+.footer a:hover {
+    color: #99f2c8;
+}
+.messages {
+    text-align: center;
+    margin-top: 1rem;
+    color: #ff4d4d;
+    font-weight: 500;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

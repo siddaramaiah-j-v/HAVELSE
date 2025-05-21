@@ -1,0 +1,1076 @@
+<!--<!DOCTYPE html>-->
+<!--{% load static %}-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>HAVELSE - Code Editor</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
+<!--    &lt;!&ndash; Monaco Editor CDN &ndash;&gt;-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs/loader.js"></script>-->
+<!--    <style>-->
+<!--        /* Background Animation */-->
+<!--        .background-animation {-->
+<!--            position: fixed;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            z-index: -1;-->
+<!--            pointer-events: none;-->
+<!--        }-->
+
+<!--        #mainNav {-->
+<!--            position: absolute;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            right: 0;-->
+<!--            z-index: 1030;-->
+<!--            border-bottom: 1px solid #dee2e6;-->
+<!--            background-color: #fff;-->
+<!--            font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-->
+<!--        }-->
+<!--        #mainNav .navbar-brand {-->
+<!--            font-weight: 450;-->
+<!--        }-->
+<!--        #mainNav .navbar-toggler {-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: 450;-->
+<!--            padding: 0.75rem;-->
+<!--        }-->
+<!--        #mainNav .navbar-nav > li.nav-item > a.nav-link {-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: 450;-->
+<!--            letter-spacing: 0.0625em;-->
+<!--        }-->
+<!--        @media (min-width: 992px) {-->
+<!--            #mainNav {-->
+<!--                border-bottom: 1px solid transparent;-->
+<!--                background: transparent;-->
+<!--            }-->
+<!--        }-->
+<!--        @media (min-width: 992px) {-->
+<!--            #mainNav {-->
+<!--                transition: background-color 0.2s;-->
+<!--                transform: translate3d(0, 0, 0);-->
+<!--                -webkit-backface-visibility: hidden;-->
+<!--                backface-visibility: hidden;-->
+<!--            }-->
+<!--            #mainNav.is-fixed {-->
+<!--                position: fixed;-->
+<!--                top: -83px;-->
+<!--                transition: transform 0.2s;-->
+<!--                border-bottom: 1px solid white;-->
+<!--                background-color: rgba(255, 255, 255, 0.9);-->
+<!--            }-->
+<!--            #mainNav.is-fixed .navbar-brand {-->
+<!--                color: #212529;-->
+<!--            }-->
+<!--            #mainNav.is-fixed .navbar-brand:focus, #mainNav.is-fixed .navbar-brand:hover {-->
+<!--                color: #0085A1;-->
+<!--            }-->
+<!--            #mainNav.is-fixed .navbar-nav > li.nav-item > a {-->
+<!--                color: #212529;-->
+<!--            }-->
+<!--            #mainNav.is-fixed .navbar-nav > li.nav-item > a:focus, #mainNav.is-fixed .navbar-nav > li.nav-item > a:hover {-->
+<!--                color: #0085A1;-->
+<!--            }-->
+<!--            #mainNav.is-visible {-->
+<!--                transform: translate3d(0,150%, 0);-->
+<!--            }-->
+<!--        }-->
+
+<!--        .wave {-->
+<!--            position: absolute;-->
+<!--            opacity: 0.1;-->
+<!--            width: 200%;-->
+<!--            height: 200%;-->
+<!--            background: linear-gradient(45deg, #FF9A9E, #FAD0C4, #fba3e2, #A6C1EE);-->
+<!--            animation: wave 15s infinite linear;-->
+<!--            transform-origin: 50% 50%;-->
+<!--        }-->
+
+<!--        .wave:nth-child(2) {-->
+<!--            animation-delay: -5s;-->
+<!--            opacity: 0.05;-->
+<!--            background: linear-gradient(45deg, #f9a48c, #FF9A9E, #A6C1EE, #f8a4e0);-->
+<!--        }-->
+
+<!--        .wave:nth-child(3) {-->
+<!--            animation-delay: -10s;-->
+<!--            opacity: 0.07;-->
+<!--            background: linear-gradient(45deg, #faa3e1, #A6C1EE, #FF9A9E, #FAD0C4);-->
+<!--        }-->
+
+<!--        @keyframes wave {-->
+<!--            from { transform: rotate(0deg) scale(1.5); }-->
+<!--            to { transform: rotate(360deg) scale(1.5); }-->
+<!--        }-->
+
+<!--        /* Custom CSS for mobile view */-->
+<!--        @media (max-width: 992px) {-->
+<!--            .navbar-nav .nav-item .dropdown-menu {-->
+<!--                text-align: left;-->
+<!--            }-->
+<!--            .navbar-nav .nav-item .dropdown-toggle {-->
+<!--                width: 100%;-->
+<!--                text-align: left;-->
+<!--            }-->
+<!--        }-->
+
+<!--        a.dropdown-toggle::after {-->
+<!--            display: none;-->
+<!--        }-->
+
+<!--        .nav-link:hover {-->
+<!--            transform: translateY(-2px);-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .hovernav:hover {-->
+<!--            background-color: #7bada0;-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--        .dropdown-item:hover {-->
+<!--            background-color: #7bada0;-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--        .navbar-text img {-->
+<!--            margin-left: 10px;-->
+<!--        }-->
+
+<!--        /* Editor Styles */-->
+<!--        .editor-container {-->
+<!--            margin-top: 5rem;-->
+<!--            padding: 2rem;-->
+<!--        }-->
+
+<!--        #editor-wrapper {-->
+<!--            height: 70vh;-->
+<!--            border-radius: 10px;-->
+<!--            overflow: hidden;-->
+<!--            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);-->
+<!--            transition: box-shadow 0.3s ease;-->
+<!--        }-->
+
+<!--        #editor-wrapper:hover {-->
+<!--            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);-->
+<!--        }-->
+
+<!--        #monaco-editor {-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--        }-->
+
+<!--        .editor-controls {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            margin-bottom: 1rem;-->
+<!--            flex-wrap: wrap;-->
+<!--            gap: 10px;-->
+<!--        }-->
+
+<!--        .editor-header {-->
+<!--            margin-bottom: 2rem;-->
+<!--            text-align: center;-->
+<!--            animation: fadeInDown 1s ease-in-out;-->
+<!--        }-->
+
+<!--        .editor-header h1 {-->
+<!--            color: #1f4037;-->
+<!--            font-weight: bold;-->
+<!--        }-->
+
+<!--        .editor-header p {-->
+<!--            color: #555;-->
+<!--            font-size: 1.2rem;-->
+<!--        }-->
+
+<!--        .output-panel {-->
+<!--            margin-top: 2rem;-->
+<!--            padding: 1rem;-->
+<!--            background-color: #f8f9fa;-->
+<!--            border-radius: 10px;-->
+<!--            border-left: 4px solid #1f4037;-->
+<!--            min-height: 100px;-->
+<!--            max-height: 200px;-->
+<!--            overflow-y: auto;-->
+<!--        }-->
+
+<!--        .btn-run {-->
+<!--            background-color: #1f4037;-->
+<!--            border-color: #1f4037;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .btn-run:hover {-->
+<!--            background-color: #2a5246;-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        .btn-outline-secondary {-->
+<!--            border-color: #7bada0;-->
+<!--            color: #1f4037;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .btn-outline-secondary:hover {-->
+<!--            background-color: #7bada0;-->
+<!--            color: white;-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        /* Animation */-->
+<!--        @keyframes fadeInDown {-->
+<!--            from {-->
+<!--                opacity: 0;-->
+<!--                transform: translateY(-30px);-->
+<!--            }-->
+<!--            to {-->
+<!--                opacity: 1;-->
+<!--                transform: translateY(0);-->
+<!--            }-->
+<!--        }-->
+
+<!--        @keyframes fadeInUp {-->
+<!--            from {-->
+<!--                opacity: 0;-->
+<!--                transform: translateY(30px);-->
+<!--            }-->
+<!--            to {-->
+<!--                opacity: 1;-->
+<!--                transform: translateY(0);-->
+<!--            }-->
+<!--        }-->
+
+<!--        .feature-card {-->
+<!--            background: white;-->
+<!--            border-radius: 15px;-->
+<!--            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);-->
+<!--            padding: 1.5rem;-->
+<!--            margin-bottom: 2rem;-->
+<!--            transition: transform 0.3s ease, box-shadow 0.3s ease;-->
+<!--            animation: fadeInUp 1s ease-in-out;-->
+<!--        }-->
+
+<!--        .feature-card:hover {-->
+<!--            transform: translateY(-5px);-->
+<!--            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);-->
+<!--        }-->
+
+<!--        .feature-icon {-->
+<!--            font-size: 2rem;-->
+<!--            color: #1f4037;-->
+<!--            margin-bottom: 1rem;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    &lt;!&ndash; Background Animation &ndash;&gt;-->
+<!--    <div class="background-animation">-->
+<!--        <div class="wave"></div>-->
+<!--        <div class="wave"></div>-->
+<!--        <div class="wave"></div>-->
+<!--    </div>-->
+
+<!--    <div class="navbar navbar-expand-lg navbar-light">-->
+<!--        &lt;!&ndash; Toggle navbar for mobile&ndash;&gt;-->
+<!--        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#mainNav">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--        <span class="navbar-text text-dark p-2 ms-auto d-lg-none">-->
+<!--            {% if user.is_authenticated %}-->
+<!--                Welcome, {{ user.username }}-->
+<!--            {% else %}-->
+<!--                Welcome, Guest-->
+<!--            {% endif %}-->
+<!--        </span>-->
+<!--        <span class="nav-item dropdown">-->
+<!--            <a class="nav-link active btn dropdown-toggle d-lg-none m-2" data-bs-toggle="dropdown" href="#">-->
+<!--                <img src="{% static 'learn/images/profile.png' %}" alt="profile" height="40px" width="40px">-->
+<!--            </a>-->
+<!--            <ul class="dropdown-menu dropdown-menu-end p-3">-->
+<!--                <li><a class="dropdown-item rounded" href="">Edit Profile</a></li>-->
+<!--                <li><a class="dropdown-item rounded" href="">Delete Account</a></li>-->
+<!--                <li><a class="dropdown-item rounded" href="{% url 'logout' %}">Logout</a></li>-->
+<!--            </ul>-->
+<!--        </span>-->
+<!--        <div class="collapse navbar-collapse" id="mainNav">-->
+<!--            <ul class="navbar-nav me-auto">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="hovernav nav-link active rounded p-2 m-2" href="{% url 'learn:topics' %}">Topics</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="hovernav nav-link active p-2 rounded m-2" href="">Code Editor</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="hovernav nav-link active p-2 rounded m-2" href="">Solve Problems</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="hovernav nav-link active p-2 rounded m-2" href="{% url 'learn:chat' %}">Gemini Assistant</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a target="_blank" class="hovernav nav-link active p-2 rounded m-2" href="https://placementdrive.in/links">Internship/Jobs</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--            <span class="navbar-text text-dark p-2 d-none d-lg-block">-->
+<!--                {% if user.is_authenticated %}-->
+<!--                    Welcome, {{ user.username }}-->
+<!--                {% else %}-->
+<!--                    Welcome, Guest-->
+<!--                {% endif %}-->
+<!--            </span>-->
+
+<!--            <span class="nav-item dropdown">-->
+<!--                <a class="nav-link active dropdown-toggle d-lg-block m-2" data-bs-toggle="dropdown" href="#">-->
+<!--                    <img src="{{ user.profile.image.url }}" alt="profile" height="40px" width="40px" class="rounded-circle">-->
+<!--                </a>-->
+<!--                <ul class="dropdown-menu dropdown-menu-end p-3">-->
+<!--                    <li><a class="dropdown-item rounded" href="{% url 'users:edit' %}">Edit Profile</a></li>-->
+<!--                    <li><a class="dropdown-item rounded" href="">Delete Account</a></li>-->
+<!--                    <li><hr class="dropdown-divider"></li>-->
+<!--                    <li>-->
+<!--                    {% if user.is_authenticated %}-->
+<!--                        <button type="submit" class="dropdown-item rounded" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>-->
+<!--                    {% endif %}-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </span>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Logout Modal &ndash;&gt;-->
+<!--    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">-->
+<!--      <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--          <div class="modal-header">-->
+<!--            <h5 class="modal-title">Confirm Logout</h5>-->
+<!--            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--          </div>-->
+<!--          <div class="modal-body">-->
+<!--            Are you sure you want to log out?-->
+<!--          </div>-->
+<!--          <div class="modal-footer">-->
+<!--            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>-->
+<!--              <form method="POST" action="{% url 'logout' %}" style="display: inline;">-->
+<!--                {% csrf_token %}-->
+<!--                <button type="submit" class="btn btn-danger">Yes, Logout</button>-->
+<!--              </form>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Code Editor Section &ndash;&gt;-->
+<!--    <div class="container editor-container">-->
+<!--        <div class="editor-header">-->
+<!--            <h1>HAVELSE Code Editor</h1>-->
+<!--            <p>Write, edit, and run your code in multiple programming languages</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Editor Controls &ndash;&gt;-->
+<!--        <div class="editor-controls">-->
+<!--            <div>-->
+<!--                <select id="language-select" class="form-select">-->
+<!--                    <option value="javascript">JavaScript</option>-->
+<!--                    <option value="python">Python</option>-->
+<!--                    <option value="java">Java</option>-->
+<!--                    <option value="csharp">C#</option>-->
+<!--                    <option value="cpp">C++</option>-->
+<!--                    <option value="typescript">TypeScript</option>-->
+<!--                    <option value="php">PHP</option>-->
+<!--                    <option value="ruby">Ruby</option>-->
+<!--                    <option value="sql">SQL</option>-->
+<!--                    <option value="html">HTML</option>-->
+<!--                    <option value="css">CSS</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <select id="theme-select" class="form-select">-->
+<!--                    <option value="vs">Light</option>-->
+<!--                    <option value="vs-dark" selected>Dark</option>-->
+<!--                    <option value="hc-black">High Contrast Dark</option>-->
+<!--                    <option value="hc-light">High Contrast Light</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <select id="font-size" class="form-select">-->
+<!--                    <option value="12">12px</option>-->
+<!--                    <option value="14" selected>14px</option>-->
+<!--                    <option value="16">16px</option>-->
+<!--                    <option value="18">18px</option>-->
+<!--                    <option value="20">20px</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <button id="run-btn" class="btn btn-success btn-run">-->
+<!--                    <i class="fas fa-play me-2"></i> Run Code-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <iframe height="400px" width="100%" src="https://replit.com/@yourusername/example?lite=true"></iframe>-->
+<!--            <div>-->
+<!--                <button id="save-btn" class="btn btn-outline-secondary">-->
+<!--                    <i class="fas fa-save me-2"></i> Save-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <button id="share-btn" class="btn btn-outline-secondary">-->
+<!--                    <i class="fas fa-share-alt me-2"></i> Share-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Editor &ndash;&gt;-->
+<!--        <div id="editor-wrapper">-->
+<!--            <div id="monaco-editor"></div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Output Panel &ndash;&gt;-->
+<!--        <div class="output-panel">-->
+<!--            <h5><i class="fas fa-terminal me-2"></i> Output</h5>-->
+<!--            <div id="output-content"></div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Features Section &ndash;&gt;-->
+<!--        <div class="row mt-5">-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-code"></i>-->
+<!--                    </div>-->
+<!--                    <h3>Multiple Languages</h3>-->
+<!--                    <p>Code in your favorite programming language with syntax highlighting and intelligent autocomplete.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-cloud-upload-alt"></i>-->
+<!--                    </div>-->
+<!--                    <h3>Save & Share</h3>-->
+<!--                    <p>Save your work and share your code snippets with friends and colleagues.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-cogs"></i>-->
+<!--                    </div>-->
+<!--                    <h3>Run & Debug</h3>-->
+<!--                    <p>Execute your code and debug issues with our integrated development environment.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Footer Section &ndash;&gt;-->
+<!--    <footer class="footer mt-5 py-4" style="background-color: #1f4037; color: white;">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                &lt;!&ndash; About Section &ndash;&gt;-->
+<!--                <div class="col-md-4 mb-4 text-center">-->
+<!--                    <h5>About</h5><hr class="w-25 mx-auto">-->
+<!--                    <p>Havelse is your go-to platform for learning programming languages, solving coding challenges, and exploring tutorials. Join us to enhance your coding skills!</p>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Quick Links &ndash;&gt;-->
+<!--                <div class="col-md-4 mb-4 text-center">-->
+<!--                    <h5>Quick Links</h5><hr class="w-25 mx-auto">-->
+<!--                    <ul class="list-unstyled">-->
+<!--                        <li><a href="" class="text-white text-decoration-none">Python Articles</a></li>-->
+<!--                        <li><a href="" class="text-white text-decoration-none">Java Articles</a></li>-->
+<!--                        <li><a href="" class="text-white text-decoration-none">Code Editor</a></li>-->
+<!--                        <li><a href="" class="text-white text-decoration-none">Solve Problems</a></li>-->
+<!--                        <li><a href="" class="text-white text-decoration-none">Gemini Assistant</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Contact Info &ndash;&gt;-->
+<!--                <div class="col-md-4 mb-4 text-center">-->
+<!--                    <h5>Contact Us</h5><hr class="w-25 mx-auto">-->
+<!--                    <ul class="list-unstyled">-->
+<!--                        <li><i class="fas fa-envelope me-2"></i>support@havelse.com</li>-->
+<!--                        <li><i class="fas fa-phone me-2"></i>+91 6362390292</li>-->
+<!--                        <li><i class="fas fa-map-marker-alt me-2"></i>123 Coding Street, Bengaluru Tech City</li>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash; Social Media Icons &ndash;&gt;-->
+<!--                    <div class="mt-3">-->
+<!--                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>-->
+<!--                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>-->
+<!--                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>-->
+<!--                        <a href="#" class="text-white me-3"><i class="fab fa-github"></i></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Copyright &ndash;&gt;-->
+<!--            <div class="text-center mt-4 pt-3 border-top">-->
+<!--                <p class="mb-0">&copy; 2025 HAVELSE. All rights reserved.</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </footer>-->
+<!--<script>-->
+<!--  // Monaco Editor configuration-->
+<!--require.config({-->
+<!--    paths: {-->
+<!--        'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs'-->
+<!--    }-->
+<!--});-->
+
+<!--// Initialize editor-->
+<!--let editor;-->
+<!--require(['vs/editor/editor.main'], function() {-->
+<!--    // Default code snippet-->
+<!--    const defaultCode = {-->
+<!--        'javascript': '// Welcome to HAVELSE Code Editor\n// Start coding in JavaScript\n\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet("World"));',-->
+<!--        'python': '# Welcome to HAVELSE Code Editor\n# Start coding in Python\n\ndef greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("World"))',-->
+<!--        'java': '// Welcome to HAVELSE Code Editor\n// Start coding in Java\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(greet("World"));\n    }\n    \n    public static String greet(String name) {\n        return "Hello, " + name + "!";\n    }\n}',-->
+<!--        'csharp': '// Welcome to HAVELSE Code Editor\n// Start coding in C#\n\nusing System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(Greet("World"));\n    }\n    \n    static string Greet(string name) {\n        return $"Hello, {name}!";\n    }\n}',-->
+<!--        'cpp': '// Welcome to HAVELSE Code Editor\n// Start coding in C++\n\n#include <iostream>\n#include <string>\n\nstd::string greet(const std::string& name) {\n    return "Hello, " + name + "!";\n}\n\nint main() {\n    std::cout << greet("World") << std::endl;\n    return 0;\n}',-->
+<!--        'typescript': '// Welcome to HAVELSE Code Editor\n// Start coding in TypeScript\n\nfunction greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet("World"));',-->
+<!--        'php': '<?php\n// Welcome to HAVELSE Code Editor\n// Start coding in PHP\n\nfunction greet($name) {\n    return "Hello, " . $name . "!";\n}\n\necho greet("World");\n?>',-->
+<!--        'ruby': '# Welcome to HAVELSE Code Editor\n# Start coding in Ruby\n\ndef greet(name)\n  "Hello, #{name}!"\nend\n\nputs greet("World")',-->
+<!--        'sql': '&#45;&#45; Welcome to HAVELSE Code Editor\n&#45;&#45; Start coding in SQL\n\n&#45;&#45; Create a sample table\nCREATE TABLE users (\n    id INT PRIMARY KEY,\n    name VARCHAR(100),\n    email VARCHAR(100)\n);\n\n&#45;&#45; Insert some data\nINSERT INTO users (id, name, email) VALUES\n(1, \'John Doe\', \'john@example.com\'),\n(2, \'Jane Smith\', \'jane@example.com\');\n\n&#45;&#45; Query the data\nSELECT * FROM users;',-->
+<!--        'html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>HAVELSE Demo</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 0;\n            padding: 20px;\n            background-color: #f5f5f5;\n        }\n        .container {\n            max-width: 800px;\n            margin: 0 auto;\n            background-color: white;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n        }\n        h1 {\n            color: #1f4037;\n        }\n    </style>\n</head>\n<body>\n    <div class="container">\n        <h1>Welcome to HAVELSE</h1>\n        <p>This is a sample HTML page. Edit it to create your own web content!</p>\n    </div>\n</body>\n</html>',-->
+<!--        'css': '/* Welcome to HAVELSE Code Editor */\n/* Start coding in CSS */\n\nbody {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 0;\n    background-color: #f5f5f5;\n}\n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 20px;\n}\n\nheader {\n    background-color: #1f4037;\n    color: white;\n    padding: 20px;\n    text-align: center;\n}\n\n.button {\n    background-color: #7bada0;\n    color: white;\n    border: none;\n    padding: 10px 20px;\n    border-radius: 4px;\n    cursor: pointer;\n    transition: all 0.3s ease;\n}\n\n.button:hover {\n    background-color: #1f4037;\n    transform: translateY(-2px);\n}'-->
+<!--    };-->
+
+<!--    // Get the selected language-->
+<!--    const languageSelect = document.getElementById('language-select');-->
+<!--    const currentLanguage = languageSelect.value;-->
+
+<!--    // Create Monaco Editor-->
+<!--    editor = monaco.editor.create(document.getElementById('monaco-editor'), {-->
+<!--        value: defaultCode[currentLanguage],-->
+<!--        language: currentLanguage,-->
+<!--        theme: 'vs-dark',-->
+<!--        automaticLayout: true,-->
+<!--        minimap: {-->
+<!--            enabled: true-->
+<!--        },-->
+<!--        scrollBeyondLastLine: false,-->
+<!--        fontSize: 14,-->
+<!--        wordWrap: 'on',-->
+<!--        fontFamily: 'Consolas, "Courier New", monospace',-->
+<!--        scrollbar: {-->
+<!--            useShadows: false,-->
+<!--            verticalHasArrows: true,-->
+<!--            horizontalHasArrows: true,-->
+<!--            vertical: 'visible',-->
+<!--            horizontal: 'visible',-->
+<!--            verticalScrollbarSize: 12,-->
+<!--            horizontalScrollbarSize: 12-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Language change handler-->
+<!--    languageSelect.addEventListener('change', function() {-->
+<!--        const newLanguage = this.value;-->
+<!--        monaco.editor.setModelLanguage(editor.getModel(), newLanguage);-->
+
+<!--        // Set default code for the selected language-->
+<!--        editor.setValue(defaultCode[newLanguage]);-->
+<!--    });-->
+
+<!--    // Theme change handler-->
+<!--    document.getElementById('theme-select').addEventListener('change', function() {-->
+<!--        monaco.editor.setTheme(this.value);-->
+<!--    });-->
+
+<!--    // Font size change handler-->
+<!--    document.getElementById('font-size').addEventListener('change', function() {-->
+<!--        editor.updateOptions({-->
+<!--            fontSize: parseInt(this.value)-->
+<!--        });-->
+<!--    });-->
+
+<!--    // Run button handler-->
+<!--    document.getElementById('run-btn').addEventListener('click', function() {-->
+<!--        const code = editor.getValue();-->
+<!--        const language = languageSelect.value;-->
+<!--        const outputContent = document.getElementById('output-content');-->
+
+<!--        // Simulated output (in a real app, this would execute the code)-->
+<!--        outputContent.innerHTML = `<div class="alert alert-success">-->
+<!--            <p><strong>Running ${language} code...</strong></p>-->
+<!--            <pre class="mb-0">${simulateOutput(code, language)}</pre>-->
+<!--        </div>`;-->
+<!--    });-->
+
+<!--    // Save button handler-->
+<!--    document.getElementById('save-btn').addEventListener('click', function() {-->
+<!--        const code = editor.getValue();-->
+<!--        const language = languageSelect.value;-->
+
+<!--        // In a real app, this would save to database or file-->
+<!--        const alert = document.createElement('div');-->
+<!--        alert.className = 'alert alert-info alert-dismissible fade show mt-3';-->
+<!--        alert.innerHTML = `-->
+<!--            <strong>Code saved successfully!</strong>-->
+<!--            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--        `;-->
+
+<!--        document.querySelector('.editor-controls').after(alert);-->
+
+<!--        // Auto-dismiss after 3 seconds-->
+<!--        setTimeout(() => {-->
+<!--            alert.classList.remove('show');-->
+<!--            setTimeout(() => alert.remove(), 150);-->
+<!--        }, 3000);-->
+
+<!--        // In a real app, you would use AJAX to save to the server-->
+<!--        // Example:-->
+<!--        /*-->
+<!--        fetch('/save-code', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--            },-->
+<!--            body: JSON.stringify({-->
+<!--                code: code,-->
+<!--                language: language-->
+<!--            })-->
+<!--        })-->
+<!--        .then(response => response.json())-->
+<!--        .then(data => {-->
+<!--            console.log('Success:', data);-->
+<!--        })-->
+<!--        .catch((error) => {-->
+<!--            console.error('Error:', error);-->
+<!--        });-->
+<!--        */-->
+<!--    });-->
+
+<!--    // Share button handler-->
+<!--    document.getElementById('share-btn').addEventListener('click', function() {-->
+<!--        // In a real app, this would generate a shareable link-->
+
+<!--        // Create modal if it doesn't exist-->
+<!--        if (!document.getElementById('shareModal')) {-->
+<!--            const modalDiv = document.createElement('div');-->
+<!--            modalDiv.className = 'modal fade';-->
+<!--            modalDiv.id = 'shareModal';-->
+<!--            modalDiv.tabIndex = '-1';-->
+<!--            modalDiv.setAttribute('aria-labelledby', 'shareModalLabel');-->
+<!--            modalDiv.setAttribute('aria-hidden', 'true');-->
+
+<!--            modalDiv.innerHTML = `-->
+<!--                <div class="modal-dialog modal-dialog-centered">-->
+<!--                    <div class="modal-content">-->
+<!--                        <div class="modal-header">-->
+<!--                            <h5 class="modal-title" id="shareModalLabel">Share Your Code</h5>-->
+<!--                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                        </div>-->
+<!--                        <div class="modal-body">-->
+<!--                            <p>Share your code with this link:</p>-->
+<!--                            <div class="input-group">-->
+<!--                                <input type="text" class="form-control" value="https://havelse.com/editor/share/${generateShareId()}" id="shareLink" readonly>-->
+<!--                                <button class="btn btn-outline-success" type="button" id="copyShareLink">-->
+<!--                                    <i class="fas fa-copy"></i> Copy-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <div class="mt-3">-->
+<!--                                <p>Or share on social media:</p>-->
+<!--                                <div class="d-flex gap-2">-->
+<!--                                    <button class="btn btn-outline-primary">-->
+<!--                                        <i class="fab fa-twitter"></i> Twitter-->
+<!--                                    </button>-->
+<!--                                    <button class="btn btn-outline-primary">-->
+<!--                                        <i class="fab fa-facebook"></i> Facebook-->
+<!--                                    </button>-->
+<!--                                    <button class="btn btn-outline-primary">-->
+<!--                                        <i class="fab fa-linkedin"></i> LinkedIn-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            `;-->
+
+<!--            document.body.appendChild(modalDiv);-->
+
+<!--            // Add event listener for the copy button-->
+<!--            document.getElementById('copyShareLink').addEventListener('click', function() {-->
+<!--                const shareLink = document.getElementById('shareLink');-->
+<!--                shareLink.select();-->
+<!--                document.execCommand('copy');-->
+
+<!--                // Show copied feedback-->
+<!--                this.innerHTML = '<i class="fas fa-check"></i> Copied!';-->
+<!--                setTimeout(() => {-->
+<!--                    this.innerHTML = '<i class="fas fa-copy"></i> Copy';-->
+<!--                }, 2000);-->
+<!--            });-->
+<!--        }-->
+
+<!--        const modal = new bootstrap.Modal(document.getElementById('shareModal'));-->
+<!--        modal.show();-->
+<!--    });-->
+
+<!--    // Initialize navbar behavior-->
+<!--    initNavbar();-->
+<!--});-->
+
+<!--// Function to simulate code output-->
+<!--function simulateOutput(code, language) {-->
+<!--    // In a real application, this would connect to a backend service to execute the code-->
+
+<!--    switch(language) {-->
+<!--        case 'javascript':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'python':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'java':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'csharp':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'cpp':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'typescript':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'php':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'ruby':-->
+<!--            return 'Hello, World!';-->
+<!--        case 'sql':-->
+<!--            return 'Query executed successfully! 2 rows returned.\n\nid | name       | email\n&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;\n1  | John Doe   | john@example.com\n2  | Jane Smith | jane@example.com';-->
+<!--        case 'html':-->
+<!--            return 'HTML rendering is available in the preview tab.';-->
+<!--        case 'css':-->
+<!--            return 'CSS styling is available in the preview tab.';-->
+<!--        default:-->
+<!--            return 'Code executed successfully!';-->
+<!--    }-->
+<!--}-->
+
+<!--// Function to generate a random share ID-->
+<!--function generateShareId() {-->
+<!--    return Math.random().toString(36).substring(2, 10);-->
+<!--}-->
+
+<!--// Function to initialize navbar behavior-->
+<!--function initNavbar() {-->
+<!--    const mainNav = document.getElementById('mainNav');-->
+
+<!--    if (mainNav) {-->
+<!--        // Add scroll event listener for navbar-->
+<!--        window.addEventListener('scroll', () => {-->
+<!--            // If scroll position is greater than 100px-->
+<!--            if (window.scrollY > 100) {-->
+<!--                if (!mainNav.classList.contains('is-fixed')) {-->
+<!--                    mainNav.classList.add('is-fixed');-->
+<!--                    setTimeout(() => {-->
+<!--                        mainNav.classList.add('is-visible');-->
+<!--                    }, 150);-->
+<!--                }-->
+<!--            } else {-->
+<!--                mainNav.classList.remove('is-visible', 'is-fixed');-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--}-->
+
+<!--// Add keyboard shortcuts-->
+<!--document.addEventListener('keydown', function(e) {-->
+<!--    // Ctrl+Enter or Cmd+Enter to run code-->
+<!--    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {-->
+<!--        document.getElementById('run-btn').click();-->
+<!--        e.preventDefault();-->
+<!--    }-->
+
+<!--    // Ctrl+S or Cmd+S to save code-->
+<!--    if ((e.ctrlKey || e.metaKey) && e.key === 's') {-->
+<!--        document.getElementById('save-btn').click();-->
+<!--        e.preventDefault();-->
+<!--    }-->
+<!--});-->
+
+<!--// Add example selector dropdown (could be expanded)-->
+<!--function addExamplesDropdown() {-->
+<!--    const examplesDropdown = document.createElement('div');-->
+<!--    examplesDropdown.innerHTML = `-->
+<!--        <select id="examples-select" class="form-select">-->
+<!--            <option value="">Load an example...</option>-->
+<!--            <option value="hello-world">Hello World</option>-->
+<!--            <option value="factorial">Factorial Calculator</option>-->
+<!--            <option value="fibonacci">Fibonacci Sequence</option>-->
+<!--            <option value="sort-array">Sort Array</option>-->
+<!--        </select>-->
+<!--    `;-->
+
+<!--    document.querySelector('.editor-controls').appendChild(examplesDropdown);-->
+
+<!--    // Examples could be loaded from a database or predefined-->
+<!--    const examples = {-->
+<!--        'javascript': {-->
+<!--            'hello-world': 'console.log("Hello, World!");',-->
+<!--            'factorial': 'function factorial(n) {\n  if (n === 0 || n === 1) {\n    return 1;\n  }\n  return n * factorial(n - 1);\n}\n\nconsole.log(factorial(5)); // 120',-->
+<!--            'fibonacci': 'function fibonacci(n) {\n  const result = [0, 1];\n  for (let i = 2; i <= n; i++) {\n    result.push(result[i-1] + result[i-2]);\n  }\n  return result;\n}\n\nconsole.log(fibonacci(10)); // [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]',-->
+<!--            'sort-array': 'const numbers = [34, 7, 23, 32, 5, 62];\nconst sorted = numbers.sort((a, b) => a - b);\nconsole.log(sorted); // [5, 7, 23, 32, 34, 62]'-->
+<!--        },-->
+<!--        'python': {-->
+<!--            'hello-world': 'print("Hello, World!")',-->
+<!--            'factorial': 'def factorial(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(5))  # 120',-->
+<!--            'fibonacci': 'def fibonacci(n):\n    result = [0, 1]\n    for i in range(2, n + 1):\n        result.append(result[i-1] + result[i-2])\n    return result\n\nprint(fibonacci(10))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]',-->
+<!--            'sort-array': 'numbers = [34, 7, 23, 32, 5, 62]\nnumbers.sort()\nprint(numbers)  # [5, 7, 23, 32, 34, 62]'-->
+<!--        }-->
+<!--        // Add examples for other languages-->
+<!--    };-->
+
+<!--    // Handle example selection-->
+<!--    document.getElementById('examples-select').addEventListener('change', function() {-->
+<!--        const selectedExample = this.value;-->
+<!--        const currentLanguage = document.getElementById('language-select').value;-->
+
+<!--        if (selectedExample && examples[currentLanguage] && examples[currentLanguage][selectedExample]) {-->
+<!--            editor.setValue(examples[currentLanguage][selectedExample]);-->
+<!--        }-->
+
+<!--        // Reset dropdown-->
+<!--        this.value = '';-->
+<!--    });-->
+<!--}-->
+
+<!--// Call this function on page load-->
+<!--document.addEventListener('DOMContentLoaded', function() {-->
+<!--    // Additional initialization if needed-->
+
+<!--    // Add examples dropdown after the editor is loaded-->
+<!--    setTimeout(addExamplesDropdown, 1000);-->
+<!--});-->
+
+<!--// Add auto-save functionality-->
+<!--let autoSaveInterval;-->
+<!--function enableAutoSave() {-->
+<!--    // Save every 30 seconds-->
+<!--    autoSaveInterval = setInterval(() => {-->
+<!--        // In a real app, save to localStorage or backend-->
+<!--        localStorage.setItem('havelse_code', editor.getValue());-->
+<!--        localStorage.setItem('havelse_language', document.getElementById('language-select').value);-->
+
+<!--        console.log('Auto-saved at ' + new Date().toLocaleTimeString());-->
+<!--    }, 30000);-->
+<!--}-->
+
+<!--// Call enableAutoSave after the editor is initialized-->
+<!--setTimeout(enableAutoSave, 2000);-->
+
+<!--// Load saved code if available-->
+<!--function loadSavedCode() {-->
+<!--    const savedCode = localStorage.getItem('havelse_code');-->
+<!--    const savedLanguage = localStorage.getItem('havelse_language');-->
+
+<!--    if (savedCode && savedLanguage) {-->
+<!--        const languageSelect = document.getElementById('language-select');-->
+<!--        languageSelect.value = savedLanguage;-->
+<!--        languageSelect.dispatchEvent(new Event('change'));-->
+
+<!--        // Set saved code after a short delay to ensure the editor is ready-->
+<!--        setTimeout(() => {-->
+<!--            editor.setValue(savedCode);-->
+<!--        }, 500);-->
+<!--    }-->
+<!--}-->
+
+<!--// Call loadSavedCode after everything is initialized-->
+<!--setTimeout(loadSavedCode, 1500);-->
+<!--</script>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeMirror Integration</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .editor-container {
+      margin: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      padding: 8px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .toolbar select, .toolbar button {
+      margin-right: 8px;
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: white;
+    }
+
+    .editor {
+      height: 400px;
+      overflow: auto;
+    }
+
+    .cm-editor {
+      height: 100%;
+    }
+
+    .output {
+      padding: 12px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>CodeMirror Code Editor Integration</h1>
+
+  <div class="editor-container">
+    <div class="toolbar">
+      <select id="language-select">
+        <option value="javascript">JavaScript</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="python">Python</option>
+      </select>
+      <button id="run-btn">Run Code</button>
+      <button id="save-btn">Save</button>
+      <button id="copy-btn">Copy</button>
+    </div>
+    <div id="editor" class="editor"></div>
+  </div>
+ <a class="btn" href="https://vscode.dev">code edit</a>
+  <div id="output" class="output">Output will appear here...</div>
+
+  <!-- Load CodeMirror from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js"></script>
+
+  <script>
+    // Initialize CodeMirror
+    const editor = CodeMirror(document.getElementById('editor'), {
+      value: '// Write your code here\nconsole.log("Hello, world!");',
+      mode: 'javascript',
+      theme: 'default',
+      lineNumbers: true,
+      autoCloseBrackets: true,
+      matchBrackets: true,
+      indentUnit: 2,
+      tabSize: 2,
+      lineWrapping: true,
+      extraKeys: {
+        "Ctrl-/": "toggleComment",
+        "Cmd-/": "toggleComment"
+      }
+    });
+
+    // Language selection
+    const languageSelect = document.getElementById('language-select');
+    languageSelect.addEventListener('change', () => {
+      const language = languageSelect.value;
+      editor.setOption('mode', language);
+    });
+
+    // Run code button
+    document.getElementById('run-btn').addEventListener('click', () => {
+      const code = editor.getValue();
+      const language = languageSelect.value;
+      const output = document.getElementById('output');
+
+      output.textContent = 'Running code...';
+
+      if (language === 'javascript') {
+        try {
+          // Create a secure way to run JS code
+          const oldConsoleLog = console.log;
+          let consoleOutput = '';
+
+          // Override console.log
+          console.log = (...args) => {
+            consoleOutput += args.join(' ') + '\n';
+          };
+
+          // Evaluate the code
+          const result = eval(code);
+
+          // Restore original console.log
+          console.log = oldConsoleLog;
+
+          output.textContent = consoleOutput;
+          if (result !== undefined && consoleOutput === '') {
+            output.textContent = String(result);
+          }
+        } catch (err) {
+          output.textContent = 'Error: ' + err.message;
+        }
+      } else if (language === 'html') {
+        // For demo purposes, we'll just display what HTML would render
+        output.textContent = 'HTML preview would be displayed here';
+        // In a real implementation, you might use:
+        // const iframe = document.createElement('iframe');
+        // iframe.srcdoc = code;
+        // output.innerHTML = '';
+        // output.appendChild(iframe);
+      } else {
+        output.textContent = `Code execution for ${language} would happen server-side.`;
+      }
+    });
+
+    // Save button
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const code = editor.getValue();
+      const language = languageSelect.value;
+      const blob = new Blob([code], {type: 'text/plain'});
+      const a = document.createElement('a');
+
+      let extension = language;
+      if (language === 'javascript') extension = 'js';
+      else if (language === 'python') extension = 'py';
+
+      a.href = URL.createObjectURL(blob);
+      a.download = `code.${extension}`;
+      a.click();
+
+      document.getElementById('output').textContent = 'Code saved!';
+    });
+
+    // Copy button
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      const code = editor.getValue();
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById('output').textContent = 'Code copied to clipboard!';
+      }).catch(err => {
+        document.getElementById('output').textContent = 'Failed to copy code: ' + err;
+      });
+    });
+  </script>
+</body>
+</html>

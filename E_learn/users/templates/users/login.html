@@ -1,0 +1,47 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-container">
+    <h1>Login</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="login_username" class="form-label">Username</label>
+             {% for error in form.username.errors %}
+            <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+            <input type="text" class="form-control" name="username" id="login_username" placeholder="Enter your username">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+             {% for error in form.password.errors %}
+            <small class="text-danger">{{ error }}</small>
+             {% endfor %}
+            <div style="position: relative;">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
+                <img id="toggleLogin" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
+            </div>
+        </div>
+        <center>
+            <button type="submit" class="loginbtn btn">Login</button>
+        </center>
+    </form>
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="footer">
+        <p><b>Don't have an account?</b> <a href="{% url 'register' %}"><b>Sign up</b></a></p>
+    </div>
+</div>
+<script src="{% static 'users/js/script.js' %}"></script>
+{% endblock %}

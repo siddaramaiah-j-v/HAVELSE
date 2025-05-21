@@ -1,0 +1,129 @@
+
+        /* Background Animation */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        #mainNav {
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              z-index: 1030;
+              border-bottom: 1px solid #dee2e6;
+              background-color: #fff;
+              font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        #mainNav .navbar-brand {
+                font-weight: 450;
+           }
+        #mainNav .navbar-toggler {
+          font-size: 1rem;
+          font-weight: 450;
+          padding: 0.75rem;
+        }
+        #mainNav .navbar-nav > li.nav-item > a.nav-link {
+          font-size: 1rem;
+          font-weight: 450;
+          letter-spacing: 0.0625em;
+        }
+        @media (min-width: 992px) {
+        #mainNav {
+        border-bottom: 1px solid transparent;
+        background: transparent;
+        }
+        }
+        @media (min-width: 992px) {
+          #mainNav {
+            transition: background-color 0.2s;
+            /* Force Hardware Acceleration in WebKit */
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+          }
+          #mainNav.is-fixed {
+            /* when the user scrolls down, we hide the header right above the viewport */
+            position: fixed;
+            top: -83px;
+            transition: transform 0.2s;
+            border-bottom: 1px solid white;
+            background-color: rgba(255, 255, 255, 0.9);
+          }
+          #mainNav.is-fixed .navbar-brand {
+            color: #212529;
+          }
+          #mainNav.is-fixed .navbar-brand:focus, #mainNav.is-fixed .navbar-brand:hover {
+            color: #0085A1;
+          }
+          #mainNav.is-fixed .navbar-nav > li.nav-item > a {
+            color: #212529;
+          }
+          #mainNav.is-fixed .navbar-nav > li.nav-item > a:focus, #mainNav.is-fixed .navbar-nav > li.nav-item > a:hover {
+            color: #0085A1;
+          }
+          #mainNav.is-visible {
+            /* if the user changes the scrolling direction, we show the header */
+            transform: translate3d(0,150%, 0);
+          }
+        }
+
+        .wave {
+            position: absolute;
+            opacity: 0.1;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #FF9A9E, #FAD0C4, #fba3e2, #A6C1EE);
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            opacity: 0.05;
+            background: linear-gradient(45deg, #f9a48c, #FF9A9E, #A6C1EE, #f8a4e0);
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            opacity: 0.07;
+            background: linear-gradient(45deg, #faa3e1, #A6C1EE, #FF9A9E, #FAD0C4);
+        }
+
+        @keyframes wave {
+            from { transform: rotate(0deg) scale(1.5); }
+            to { transform: rotate(360deg) scale(1.5); }
+        }
+
+        /* Custom CSS to ensure proper alignment in mobile view */
+        @media (max-width: 992px) {
+            .navbar-nav .nav-item .dropdown-menu {
+                text-align: left;
+            }
+            .navbar-nav .nav-item .dropdown-toggle {
+                width: 100%;
+                text-align: left;
+            }
+        }
+        a.dropdown-toggle::after {
+            display: none;
+        }
+        .nav-link:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        .hovernav:hover{
+            background-color:#7bada0;
+
+        }
+        .dropdown-item:hover{
+            background-color: #7bada0;
+            color:white;
+        }
+        .navbar-text img {
+            margin-left: 10px;
+        }
