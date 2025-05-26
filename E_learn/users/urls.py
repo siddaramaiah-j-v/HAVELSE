@@ -7,6 +7,7 @@ urlpatterns = [
     path('',views.index,name='index'),
     path('edit/',views.edit,name='edit'),
     path('delete/',views.account_deletion,name='delete'),
+    path('accdel/',views.delete_accounts,name='account_deletion'),
     path('ajax/check-username/', views.check_username, name='check_username'),
     path('ajax/check-email/', views.check_email, name='check_email'),
     path('ajax/check-phone/',views.check_phone,name='check_phone'),

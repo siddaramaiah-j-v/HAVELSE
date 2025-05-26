@@ -57,7 +57,7 @@
                         <a class="hovernav nav-link active  p-2 rounded m-2" href="https://vscode.dev">Code Editor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="hovernav nav-link active  p-2 rounded m-2" href="#">Solve Problems</a>
+                        <a class="hovernav nav-link active  p-2 rounded m-2" href="{% url 'learn:code' %}">Solve Problems</a>
                     </li>
                     <li class="nav-item">
                         <a class="hovernav nav-link active  p-2 rounded m-2" href="{% url 'learn:chat' %}">Gemini Assistant</a>
@@ -80,17 +80,21 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-3">
                         <li><a class="dropdown-item rounded" href="{% url 'users:edit' %}">Edit Profile</a></li>
-                        <li>
                         {% if user.is_authenticated and user.is_superuser %}
-                            <a class="dropdown-item rounded" href="{% url 'admin:index' %}">Admin panel</a>
+                            <li><form action="{% url 'users:account_deletion' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item rounded">
+                                     Run Tasks</button>
+                                </form></li>
+                            <li><a class="dropdown-item rounded" href="{% url 'admin:index' %}">Admin panel</a></li>
                             {% else %}
-                            <button type="submit" class="dropdown-item rounded" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
+                            <li><button type="submit" class="dropdown-item rounded" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button></li>
                             {% endif %}
-                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li>
                         {% if user.is_authenticated %}
+                        <li>
                             <button type="submit" class="dropdown-item rounded" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
+                        </li>
                         {% endif %}
                     </ul>
                 </span>
