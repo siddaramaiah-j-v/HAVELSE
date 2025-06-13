@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.utils.timezone import timedelta
 from django.contrib.auth import logout
-'''for handling the AJAX calls'''
+
 
 
 def superuser_required(view_func):
@@ -17,6 +17,9 @@ def superuser_required(view_func):
                 return redirect('login')
         return view_func(request, *args, **kwargs)
     return wrapper
+
+
+'''for handling the AJAX calls'''
 
 def check_username(request):
     username = request.GET.get('username')
@@ -35,6 +38,8 @@ def check_email(request):
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('login')
     return render(request,'users/index.html')
 
 def register(request):
@@ -92,13 +97,11 @@ def delete_accounts(request):
     try:
         grace_period = timedelta(days=30)
         cutoff_date = timezone.now() - grace_period
-        deactivated_profiles = User.objects.filter(
-            profile__deactivated_at__lt=cutoff_date,  # Use __lt for "less than" (before cutoff)
-        ).select_related('profile')
-        count = deactivated_profiles.count()
+        deactivated_profiles = User.objects.filter(profile__deactivated_at__lt=cutoff_date,).select_related('profile')
+        # count = deactivated_profiles.count()
         for user in deactivated_profiles:
             user.is_active=False
-        messages.success(request,f'deleted {count} accounts')
+        # messages.success(request,f'deleted {count} accounts')
     except Exception as e:
         messages.error(request,f"error:{e}")
     return redirect(reverse('learn:home'))

@@ -54,10 +54,10 @@
                         <a class="hovernav nav-link active rounded p-2 m-2" href="{% url 'learn:topics' %}">Topics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="hovernav nav-link active  p-2 rounded m-2" href="https://vscode.dev">Code Editor</a>
+                        <a class="hovernav nav-link active  p-2 rounded m-2" href="{% url 'learn:code' %}">Code Editor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="hovernav nav-link active  p-2 rounded m-2" href="{% url 'learn:code' %}">Solve Problems</a>
+                        <a class="hovernav nav-link disabled  p-2 rounded m-2" href="">Solve Problems</a>
                     </li>
                     <li class="nav-item">
                         <a class="hovernav nav-link active  p-2 rounded m-2" href="{% url 'learn:chat' %}">Gemini Assistant</a>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-<div class="modal fade {% if request.GET.error == 'true' %}show{% endif %}" id="deleteModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">

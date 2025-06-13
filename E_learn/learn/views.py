@@ -1,14 +1,15 @@
 import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render,redirect
 import urllib.parse
+import time
 from .models import Course
 from django.utils.text import slugify
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 import re,json,markdown,bleach
-
 
 MAX=50
 URL="https://www.googleapis.com/youtube/v3/search"
@@ -166,11 +167,7 @@ def chat(request):
     """
     Render the Gemini Assistant page
     """
-    # You can pass additional context data here if needed
-    context = {
-        'title': 'HAVELSE - Gemini Assistant',
-    }
-    return render(request, 'learn/chat.html', context)
+    return render(request, 'learn/chat.html')
 
 
 def chat_with_gemini(request):
@@ -256,5 +253,62 @@ def get_gemini_response(message, history=None):
 
 @login_required
 def code(request):
-    return render(request,'learn/code.html')
+    return render(request,'learn/coder.html')
 
+@csrf_exempt
+def execute_code(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            source_code = data.get('source_code', '')
+            language_id = data.get('language_id', 63)  # Default to JavaScript
+
+            # Submit the code to Judge0
+            submission_url = f"{settings.JUDGE0_API_URL}/submissions?base64_encoded=false&wait=false"
+            submission_response = requests.post(
+                submission_url,
+                headers={
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': settings.RAPIDAPI_HOST,
+                },
+                json={
+                    'language_id': language_id,
+                    'source_code': source_code,
+                    'stdin': ''
+                }
+            )
+
+            if submission_response.status_code != 201:
+                return JsonResponse({'error': 'Submission failed'}, status=500)
+
+            token = submission_response.json().get('token')
+
+            # Poll until we get a result
+            result_url = f"{settings.JUDGE0_API_URL}/submissions/{token}?base64_encoded=false"
+            for _ in range(30):
+                result_response = requests.get(
+                    result_url,
+                    headers={
+                        'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+                        'X-RapidAPI-Host': settings.RAPIDAPI_HOST,
+                    }
+                )
+
+                if result_response.status_code != 200:
+                    return JsonResponse({'error': 'Failed to get result'}, status=500)
+
+                result_data = result_response.json()
+
+                # If execution is done
+                if result_data['status']['id'] > 2:
+                    return JsonResponse(result_data)
+
+                time.sleep(1)
+
+            return JsonResponse({'error': 'Timeout while waiting for result'}, status=408)
+        except Exception as e:
+
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

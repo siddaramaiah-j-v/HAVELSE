@@ -10,7 +10,7 @@ CHOICES= [
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=10)
-    gender=models.CharField(choices=CHOICES,blank=True)
+    gender=models.CharField(choices=CHOICES,blank=True,max_length=1)
     bio=models.CharField(max_length=50,blank=True)
     email = models.EmailField(unique=True)
     phone = models.IntegerField(unique=True)

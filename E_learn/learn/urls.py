@@ -11,4 +11,5 @@ urlpatterns = [
     path('chat/',views.chat,name='chat'),
     path('code/',views.code,name='code'),
     path('chat/api/', views.chat_with_gemini, name='chat_with_gemini'),
+    path('code/exe/',views.execute_code,name='execute_code'),
 ]

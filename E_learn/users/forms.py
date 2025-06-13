@@ -47,8 +47,8 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
-    """Form for updating user profile information.
-    Only allows editing name, bio, and profile image.
+    """
+    Form for updating user profile information Only allows editing name, bio, and profile image.
     """
 
     class Meta:
