@@ -112,6 +112,12 @@ AI features powered by Google Gemini:
 - Code explanation and debugging
 - Personalized learning recommendations
 
+### Code Execution
+
+Code Execution by Judge0 API
+- real time code execution
+- supports multiple languages
+- detailed error message
 
 ## Contributing
 
