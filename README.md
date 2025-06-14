@@ -45,7 +45,7 @@ Node.js >= 14.0 (for frontend dependencies)
 
 ```bash
 git clone https://github.com/siddaramaiah-j-v/HAVELSE.git
-cd distraction-free-learning-platform
+cd E_learn
 ```
 
 ### Backend Setup
