@@ -19,14 +19,15 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from users import views as user_views
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LogoutView
+from users.views import CustomLoginView,register,login_request
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('users.urls')),
     path('home/',include('learn.urls')),
-    path('login/',LoginView.as_view(template_name='users/login.html',redirect_authenticated_user=True),name='login'),
+    path('login-through-otp/',login_request,name='login_request'),
+    path('login/',CustomLoginView.as_view(redirect_authenticated_user=True),name='login'),
     path('logout/',LogoutView.as_view(),name='logout'),
-    path('register/',user_views.register,name='register'),
+    path('register/',register,name='register'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

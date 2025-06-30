@@ -3,6 +3,10 @@
 {% block title %}HAVELSE{% endblock %}
 {% block style %}
 .hero-section {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,9 +35,12 @@
     padding: 2rem;
     margin-top: 8rem;
 }
-#card2 {
-    background: white;
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 15px;
+    border: none;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     padding: 1rem;
     width: 250px;
@@ -54,7 +61,7 @@
     color: #1f4037;
 }
 .card-text {
-    color: #555;
+    color: white;
 }
 @keyframes fadeInDown {
     from {
@@ -77,48 +84,68 @@
     }
 }
     /* Additional styles for the Contact Us section */
-#card1 {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    transition: transform 0.3s;
+
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-
-#card1:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+.btn-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
 }
 
-.form-control {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.3s;
+.btn-glass:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
-.form-control:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.btn {
-    border-radius: 10px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.btn:hover {
-    background-color: #1f4037;
+.btn-glass:hover {
     transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    color: #333;
 }
-
 h2 {
     font-weight: bold;
-    color: #333;
+    color: #1f4037;
 }
 
 h5.card-title {
-    color: #1f4037;
+    color: #333;
     margin-bottom: 20px;
 }
+.card-body{
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem 4rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .contact{
     margin-top: 12rem;
 
@@ -130,27 +157,27 @@ h5.card-title {
     <p>Explore articles, tutorials and solve programming challenges</p>
 </div>
 <div class="card-container">
-    <div class="card" id="card2">
+    <div class="card">
         <img src="{% static 'learn/images/article.gif' %}" alt="Articles" width="100%" height="50%" >
         <h2 class="card-title">Articles</h2>
         <p class="card-text">Dive into a variety of articles on different programming languages and concepts.</p>
     </div>
-    <div class="card" id="card2">
+    <div class="card">
         <img src="{% static 'learn/images/video-player.gif' %}" alt="Videos" width="100%" height="50%">
         <h2 class="card-title">Videos</h2>
         <p class="card-text">Watch tutorials and improve your skills with our curated video content.</p>
     </div>
-    <div class="card" id="card2">
+    <div class="card">
         <img src="{% static 'learn/images/programmer.gif' %}" alt="Code Editor" width="100%" height="50%">
         <h2 class="card-title">Code Editor</h2>
         <p class="card-text">Write and test your code directly in our online code editor.</p>
     </div>
-    <div class="card" id="card2">
+    <div class="card">
         <img src="{% static 'learn/images/problems.gif' %}" alt="Solve Problems" width="100%" height="50%">
         <h2 class="card-title">Solve Problems</h2>
         <p class="card-text">Challenge yourself with a variety of coding problems and enhance your skills.</p>
     </div>
-    <div class="card" id="card2">
+    <div class="card">
         <img src="{% static 'learn/images/assistant.gif' %}" alt="Gemini Assistant" width="100%" height="50%">
         <h2 class="card-title">Gemini Assistant</h2>
         <p class="card-text">Get help and guidance with our AI-powered Gemini Assistant.</p>
@@ -159,33 +186,31 @@ h5.card-title {
     <!-- Contact Us Section -->
 <div class="contact">
 <div class="container mt-5 ">
-    <h2 class="text-center mb-4">Contact Us</h2>
     <div class=" row justify-content-center">
         <div class="col-md-8">
-            <div class="card  shadow-lg border-0" id="card1">
                 <div class="card-body">
+                    <h2 class="text-center mb-4">Contact Us</h2>
                     <h5 class="card-title text-center">We'd love to hear from you!</h5>
-                    <form>
+                    <form novalidate>
                         <div class="form-group mb-3">
-                            <label for="name">Name</label>
+                            <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="email">Email address</label>
+                            <label for="email" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="message">Message</label>
+                            <label for="message" class="form-label">Message</label>
                             <textarea class="form-control" id="message" rows="4" placeholder="Enter your message" required></textarea>
                         </div>
                         <center>
-                        <button type="submit" class="btn btn-success btn-block mt-3">Submit</button>
+                        <button type="submit" class="btn-glass btn-success mt-3">Submit</button>
                         </center>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}

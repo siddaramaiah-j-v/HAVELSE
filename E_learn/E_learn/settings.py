@@ -114,6 +114,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -142,3 +146,8 @@ LOGOUT_REDIRECT_URL='users:index'
 MEDIA_ROOT=os.path.join(BASE_DIR,'pictures/')
 MEDIA_URL='pictures/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@havelse.com'

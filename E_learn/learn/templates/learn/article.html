@@ -39,14 +39,29 @@
 
         /* Navbar styling */
         .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #4CAF50 !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f4037 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
         }
 
         .navbar {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            margin: 0 auto;
+            width: 95%;
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 0 0;
         }
 
         /* Sidebar scrollspy */
@@ -197,9 +212,7 @@
 <body data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="70">
 <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-braces-asterisk"></i>{{ course.title }}
-            </a>
+            <a class="navbar-brand" href="{% url 'learn:home' %}">HAVELSE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

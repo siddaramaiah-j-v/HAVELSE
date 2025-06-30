@@ -2,62 +2,59 @@
 {% load static %}
 {% block title %}Signup{% endblock %}
 {% block content %}
-<div class="signup-container">
-<h1>Signup</h1>
+<div class="login-container">
+<h1 class="brand-title">HAVELSE</h1>
 <form id="regForm" method='POST' novalidate>
   {% csrf_token %}
     {{ form.non_field_errors }}
-    <label for="name">Name</label>
-    {% for error in form.name.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small class="error-message" id="nameError"></small>
-    {{ form.name }}
-
-
-    <label for="phone">Phone</label>
-    {% for error in form.phone.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small class="error-message" id="phoneStatus"></small>
-    {{ form.phone }}
-
-    <label for="email">Email</label>
-    {% for error in form.email.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small class="text-danger" id="emailStatus"></small>
-    {{ form.email }}
-
-
-    <label for="username">Username</label>
-    {% for error in form.username.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small id="usernameStatus"></small>
+    <label for="usernameStatus" class="form-label">Username</label>
+    <small class="error-messages" id="usernameStatus">
+    {% if form.username.errors %}
+    {{ form.username.errors.0 }}
+    {% endif %}
+    </small>
     {{ form.username }}
 
 
-    <label for="password1">Password</label>
-    {% for error in form.password1.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small class="text-danger" id="password1Error"></small>
+    <label for="phoneStatus" class="form-label">Phone</label>
+    <small class="text-danger" id="phoneStatus">
+    {% if form.phone.errors %}
+    {{ form.phone.errors.0 }}
+    {% endif %}
+    </small>
+    {{ form.phone }}
+
+    <label for="emailStatus" class="form-label">Email</label>
+    <small class="text-danger" id="emailStatus">
+    {% if form.email.errors %}
+    {{ form.email.errors.0 }}
+    {% endif %}
+    </small>
+    {{ form.email }}
+
+
+    <label for="password1Error" class="form-label">Password</label>
+    <small class="text-danger" id="password1Error">
+    {% if form.password1.errors %}
+    {{ form.password1.errors.0 }}
+    {% endif %}
+    </small>
     <div style="position: relative;">
         {{ form.password1 }}
         <img id="togglePassword1" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
     </div>
 
-    <label for="password2">Confirm Password</label>
-    {% for error in form.password2.errors %}
-    <small class="text-danger">{{ error }}</small>
-    {% endfor %}
-    <small class="text-danger" id="passwordError"></small>
+    <label for="passwordError" class="form-label">Confirm Password</label>
+    <small class="text-danger" id="passwordError">
+    {% if form.password2.errors %}
+    {{ form.password2.errors.0 }}
+    {% endif %}
+    </small>
     <div style="position: relative;">
         {{ form.password2 }}
         <img id="togglePassword2" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
     </div>
-    <button type="submit" class="signupbtn">Signup</button>
+    <button type="submit" class="loginbtn">Signup</button>
     {% if form.non_field_errors %}
         {% for error in form.non_field_errors %}
             <small class="text-danger">{{ error }}</small>
@@ -66,7 +63,7 @@
     {% if messages %}
     <div class="messages">
     {% for message in messages %}
-        <p>{{ message }}</p>
+        <p class="alert alert-{{ message.tags }}">{{ message }}</p>
     {% endfor %}
     </div>
 {% endif %}
@@ -142,9 +139,10 @@
   // Phone validation with debounce
   const phoneInput = document.getElementById("phone");
   const phoneStatus = document.getElementById("phoneStatus");
+  const phoneRegex = /^(?:\+91[\-\s]?|0)?[6-9]\d{9}$/;
 
   const validatePhone = debounce((phone) => {
-    if (phone.length === 10) {
+    if (phoneRegex.test(phone)) {
       fetch(`/ajax/check-phone/?phone=${phone}`)
         .then(res => res.json())
         .then(data => {
@@ -158,7 +156,7 @@
   }, 500); // 500ms debounce delay
 
   phoneInput.addEventListener("input", () => {
-    const phone = phoneInput.value;
+    const phone = phoneInput.value.trim();
     validatePhone(phone);
   });
 });

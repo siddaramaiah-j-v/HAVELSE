@@ -1,3 +1,4 @@
+
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #1f4037, #99f2c8);
@@ -7,24 +8,40 @@ body {
     align-items: center;
     margin: 0;
 }
+.brand-title {
+    font-family:Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align:center;
+    color: #1f4037;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 0.8s ease-out;
+}
 .login-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 2rem;
     border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
     animation: fadeIn 1s ease-in-out;
+    -webkit-animation: fadeIn 1s ease-in-out;
 }
-.signup-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px;
-    animation: fadeIn 1s ease-in-out;
+
+@keyframes -webkit-fadeIn {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
 }
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -35,39 +52,35 @@ body {
         transform: translateY(0);
     }
 }
-h1 {
-    text-align: center;
-    color: #1f4037;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-}
 .form-control {
-    border: 2px solid #1f4037;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 1rem;
-    transition: border-color 0.3s ease;
-}
-.form-control:focus {
-    border-color: #99f2c8;
-    box-shadow: 0 0 10px rgba(31, 64, 55, 0.2);
-}
-.signupbtn {
-    background: linear-gradient(135deg, #1f4037, #99f2c8);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
-}
-.signupbtn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(31, 64, 55, 0.3);
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 12px !important;
+            color: white !important;
+            padding: 0.8rem 1rem !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
 
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+    color: white !important;
+}
+.form-label{
+    font-weight: 500;
+    color:#f7faf9;
+    margin-bottom: 0.5rem;
+}
+
+
+
+
 
 .loginbtn {
     background: linear-gradient(135deg, #1f4037, #99f2c8);
@@ -78,6 +91,8 @@ h1 {
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
 }
 .loginbtn:hover {
     transform: translateY(-3px);
@@ -105,11 +120,33 @@ h1 {
     color: #ff4d4d;
     font-weight: 500;
 }
-
+.error_messages{
+        text-color:red;
+}
 .password-toggle {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
+}
+
+.alert {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:hover,
+input.form-control:-webkit-autofill:focus,
+input.form-control:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset !important;
+    box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset !important;
+    -webkit-text-fill-color: inherit !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    caret-color: auto;
 }

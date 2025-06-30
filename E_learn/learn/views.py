@@ -2,7 +2,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 import urllib.parse
 import time
 from .models import Course
@@ -233,7 +233,7 @@ def get_gemini_response(message, history=None):
 
             # Generate response
             response = chat.send_message(
-                     {'parts':{'text':message}}
+                     {'parts':[{'text':message}]}
             )
             return response.text
 

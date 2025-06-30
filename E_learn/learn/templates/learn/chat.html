@@ -4,17 +4,24 @@
 {% block style %}
         /* Gemini Assistant Specific Styles */
         .gemini-header {
-            margin-top: 6rem;
+            position: relative;
+            z-index: 10;
+            opacity: 1 !important;
+            visibility: visible !important;
+            margin-top: 8rem;
             text-align: center;
-            margin-bottom: 2rem;
-            color: #1f4037;
+            margin-bottom: 4rem;
+            color: white;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bolder;
             animation: fadeInDown 1s ease-in-out;
         }
 
         .chat-container {
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
@@ -61,17 +68,22 @@
 
         .message-input-container {
             padding: 15px;
-            border-top: 1px solid #e0e0e0;
-            background-color: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
+            border-bottom-right-radius: 0;
         }
 
         .message-input {
             border-radius: 20px;
-            padding: 10px 15px;
+            padding-right: 3.5rem;
             border: 1px solid #ced4da;
+            overflow: hidden;
+            min-height: 45px;
+            max-height: 200px;
             transition: border-color 0.3s;
+            z-index: 1;
         }
 
         .message-input:focus {
@@ -80,10 +92,22 @@
         }
 
         .send-button {
-            border-radius: 20px;
-            background-color: #1f4037;
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
+            padding: 0 !important;
+            margin-top:2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: background-color 0.3s, transform 0.3s;
+            z-index: 2;
+            pointer-events: auto;
         }
 
         .send-button:hover {
@@ -147,7 +171,10 @@
         }
 
         .feature-item {
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
@@ -202,12 +229,12 @@
                 <span class="dot"></span>
             </div>
             <div class="message-input-container">
-                <form id="messageForm">
+                <form id="messageForm" novalidate>
                     {% csrf_token %}
-                    <div class="input-group">
-                        <input type="text" class="form-control message-input" id="userMessage" placeholder="Ask me anything about coding..." required>
-                        <button type="submit" class="btn send-button">
-                            <i class="fas fa-paper-plane me-1"></i> Send
+                    <div class="input-group position-relative">
+                        <textarea class="form-control message-input pe-5" id="userMessage" placeholder="Ask me anything about coding..." required></textarea>
+                        <button type="submit" class="send-button" style="bottom: 8px; right: 10px;">
+                            <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </form>

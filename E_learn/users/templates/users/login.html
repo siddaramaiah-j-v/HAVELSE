@@ -1,17 +1,87 @@
 {% extends 'users/base.html' %}
 {% load static %}
 {% block title %}Login{% endblock %}
+{% block style %}
+
+.login-subtitle {
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.8s ease-out;
+}
+.btn-otp {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.btn-otp:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(31, 64, 55, 0.3);
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.forgot-password {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-password:hover {
+    color: #45a049;
+    text-decoration: underline;
+}
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.divider span {
+    padding: 0 1rem;
+}
+
+{% endblock %}
 {% block content %}
 <div class="login-container">
-    <h1>Login</h1>
+    <h1 class="brand-title">HAVELSE</h1>
+        <p class="login-subtitle">
+            Login to your account to continue
+        </p>
     <form method="POST" novalidate>
         {% csrf_token %}
         <div class="mb-3">
-            <label for="login_username" class="form-label">Username</label>
+            <label for="login_username" class="form-label">Email</label>
              {% for error in form.username.errors %}
             <small class="text-danger">{{ error }}</small>
             {% endfor %}
-            <input type="text" class="form-control" name="username" id="login_username" placeholder="Enter your username">
+            <input type="text" class="form-control" name="username" id="login_username" placeholder="Enter your email or username">
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
@@ -23,9 +93,28 @@
                 <img id="toggleLogin" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
             </div>
         </div>
+        <div class="login-options">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        Remember me
+                    </label>
+<!--                    <a href="#" class="forgot-password">-->
+<!--                        Forgot Password?-->
+<!--                    </a>-->
+                </div>
         <center>
             <button type="submit" class="loginbtn btn">Login</button>
         </center>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                <center>
+                <a href="{% url 'login_request' %}" class="btn btn-otp">
+                    <i class="fas fa-mobile-alt me-2"></i>
+                    Login with OTP
+                </a>
+                    </center>
     </form>
     {% if form.non_field_errors %}
         {% for error in form.non_field_errors %}
@@ -35,7 +124,7 @@
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
-            <p>{{ message }}</p>
+            <p class="alert alert-{{ message.tags }}">{{ message }}</p>
         {% endfor %}
     </div>
     {% endif %}

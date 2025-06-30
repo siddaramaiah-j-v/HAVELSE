@@ -3,22 +3,31 @@
 {% block title %}HAVELSE - YouTube Tutorials{% endblock %}
 {% block style %}
 .btn {
-    background:#1f4037;
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 1;
+    margin-top:0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
+
+
 /* Hero section for tutorials page */
 .tutorial-hero-section {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,12 +54,19 @@
 
 /* Tutorials section */
 .tutorials-container {
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
     margin: 2rem auto;
     max-width: 1200px;
 }
 
 .video-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
@@ -76,7 +92,7 @@
     width: 100%;
     height: 100%;
     border: 0;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
 }
 
 .video-info {
@@ -90,7 +106,7 @@
 }
 
 .video-description {
-    color: #555;
+    color: white;
     margin-bottom: 1rem;
 }
 
@@ -116,7 +132,7 @@
     margin: 3rem 0;
 }
 .page-link {
-    color: #1f4037;
+    color: white;
     border:none;
     box-shadow:none;
     background-color:transparent;
@@ -124,12 +140,17 @@
 }
 
 .page-link:hover {
-    background-color: #e9f5e9;
-    color: #4CAF50;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: white;
+    transition: all 0.3s ease;
 }
 
 .page-item.active .page-link {
     background-color: #4CAF50;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Animation keyframes */
@@ -160,14 +181,14 @@
 <div class="tutorial-hero-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="offset-1 col-md-8 text-center">
-                <div class="input-group mb-3 mx-auto" style="max-width: 50%;">
-                    <form action="{% url 'learn:search' %}" method="POST">
+            <div class="col-md-8 text-center">
+                <form action="{% url 'learn:search' %}" method="POST">
                         {% csrf_token %}
-                    <input type="text" class="form-control" name="query" placeholder="search here">
-                    <button class="fas fa-search btn" type="submit" id="button-addon2"></button>
-                    </form>
-                </div>
+                    <div class="input-group mb-3 mx-auto" style="width: 50%;">
+                        <input type="text" class="form-control" name="query" placeholder="search here">
+                        <button class="fas fa-search btn" type="submit" id="button-addon2"></button>
+                    </div>
+                </form>
             </div>
         </div>
     <h1>YouTube Tutorials</h1>
@@ -189,12 +210,13 @@
                     </div>
                     <div class="video-info">
                         <h3 class="video-title">{{ video.title }}</h3>
-                        <p class="video-description">{{ video.description }}</p>
-                        <div class="video-tags">
-                            <span class="video-tag">{{ video.title }}</span>
-<!--                            <button type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="ram">summarize</button>-->
-<!--                                <span class="video-tag">Beginners</span>-->
-<!--                                <span class="video-tag">Programming</span>-->
+                        <div id="videoInfo">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{video.id}}">
+                            more..
+                            </button>
+                            <div id="collapse{{video.id}}" class="collapse" data-bs-parent="#videoInfo">
+                                <p class="video-description">{{ video.description }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -207,7 +229,7 @@
                 </div>
             </div>
             {% endif %}
-            </div>
+        </div>
     </div>
 </div>
 <div class="pagination-container container">

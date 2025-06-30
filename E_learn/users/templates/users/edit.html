@@ -4,12 +4,19 @@
 {% block style %}
 /* Profile Edit Page Specific Styles */
 .profile-edit-container {
-    margin-top: 7rem;
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-top: 1rem;
     margin-bottom: 3rem;
 }
 
 .profile-card {
-    background-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
@@ -28,16 +35,6 @@
     text-align: center;
 }
 
-.form-control {
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    transition: all 0.3s;
-}
-
-.form-control:focus {
-    border-color: #99BC85;
-    box-shadow: 0 0 0 0.25rem rgba(153, 188, 133, 0.25);
-}
 
 .profile-image-container {
     display: flex;
@@ -98,14 +95,6 @@
     transform: translateY(-2px);
 }
 
-.form-label {
-    font-weight: 500;
-    color: #1f4037;
-}
-
-.form-text {
-    color: #666;
-}
 
 /* Preview image upload */
 #imagePreview {
@@ -149,7 +138,6 @@
                     {% endif %}
                     <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
-
                         <div class="profile-image-container">
                             <img src="{{ user.profile.image.url }}" alt="Profile Image" class="profile-image" id="profileDisplay">
                             <div class="mt-3">

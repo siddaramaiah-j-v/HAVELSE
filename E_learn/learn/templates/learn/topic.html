@@ -3,11 +3,13 @@
 {% block title %}HAVELSE - YouTube Tutorials{% endblock %}
 {% block style %}
 .btn {
-    background: linear-gradient(45deg, #1a1a1a, #333);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
-    border: none;
     padding: 0.8rem 1.5rem;
-    border-radius: 50px;
+    border-radius: 50px !important;
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -38,6 +40,7 @@
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
+
 /* Hero section */
 .hero-section {
     display: flex;
@@ -47,6 +50,10 @@
     text-align: center;
     padding: 8rem 0 4rem 0;
     color: #333;
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .hero-section h1 {
@@ -65,14 +72,21 @@
 
 /* Topic cards section */
 .topics-container {
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
     padding: 2rem 0 5rem 0;
 }
 
 .topic-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    position:relative;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%;
@@ -98,14 +112,14 @@
 }
 
 .card-title {
-    color: #333;
+    color: #1f4037;
     font-weight: 600;
     font-size: 1.4rem;
     margin-bottom: 1rem;
 }
 
 .card-text {
-    color: #666;
+    color: white;
     margin-bottom: 1.5rem;
     flex-grow: 1;
 }
@@ -123,55 +137,29 @@
     transition: all 0.3s ease;
 }
 
-/* Footer */
-footer {
-    background-color: #2D3748;
-    color: white;
-    padding: 3rem 0;
+
+#button-addon2.subscribed {
+  background-color: #28a745;
 }
 
-.footer-title {
-    font-weight: 600;
-    margin-bottom: 1.2rem;
+
+.newsletter {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem 4rem;
 }
 
-.footer-links a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    display: block;
-    margin-bottom: 0.5rem;
-    transition: all 0.3s ease;
+.form-control {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius:50px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.footer-links a:hover {
-    color: white;
-    transform: translateX(5px);
-}
-
-.social-links a {
-    display: inline-block;
-    width: 36px;
-    height: 36px;
-    background-color: rgba(255, 255, 255, 0.1);
-    text-align: center;
-    line-height: 36px;
-    border-radius: 50%;
-    margin-right: 10px;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-3px);
-}
-
-.copyright {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-}
 
 /* Animations */
 @keyframes fadeInDown {
@@ -219,7 +207,7 @@ footer {
 <!-- Topics Section -->
 <section id="topics" class="topics-container">
     <div class="container">
-        <h2 class="text-center mb-5">Programming Topics</h2>
+        <h2 class="text-center mb-5 text-black">Programming Topics</h2>
         <div class="row">
             {% for course in courses %}
             <div class="offset-1 col-md-5 mb-4">
@@ -244,16 +232,13 @@ footer {
 </section>
 
 <!-- Newsletter Section -->
-<section class="bg-light py-5">
+<section class="py-5">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
+            <div class="col-md-8 text-center newsletter">
                 <h2>Stay Updated</h2>
                 <p class="mb-4">Subscribe to our newsletter to receive the latest articles, tutorials, and coding tips.</p>
-                <div class="input-group mb-3 mx-auto" style="max-width: 500px;">
-                    <input type="email" class="form-control" placeholder="Enter your email address" aria-label="Email" aria-describedby="button-addon2">
-                    <button class="btn btn-primary" type="button" id="button-addon2">Subscribe</button>
-                </div>
+                <button class="btn" type="button" id="button-addon2">Subscribe</button>
             </div>
         </div>
     </div>
@@ -272,6 +257,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+const button = document.getElementById("button-addon2");
+
+button.addEventListener("click", function () {
+    if (button.textContent.trim() === "Subscribe") {
+        button.textContent = "Subscribed";
+        button.style.backgroundColor = '#1f4037';
+    } else {
+        button.textContent = "Subscribe";
+        button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+    }
+  });
 
 // Navbar scroll effect
 window.addEventListener('scroll', function() {
