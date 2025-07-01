@@ -55,7 +55,7 @@
                     </span>
                 <li class="nav-item">
                     <button class="nav-link profile my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <img src="{{ user.profile.image.url }}" alt="profile" height="40px" width="40px" class="rounded-circle">
+                        <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='{% static 'learn/images/profile.png' %}';" alt="profile" height="40px" width="40px" class="rounded-circle">
                     </button>
                 </li>
                 </ul>
@@ -71,7 +71,7 @@
             <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px; z-index: 10;"></button>
             <div class="profile-header">
                 <div class="profile-image-container">
-                    <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="profile-image" id="profileImage">
+                    <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='{% static 'learn/images/profile.png' %}';" alt="Profile Picture" class="profile-image" id="profileImage">
                     <div class="status-badge status-verified" id="statusBadge">
                         <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
                     </div>
@@ -129,11 +129,15 @@
                 <a class="btn-glass" href="{% url 'users:edit' %}">
                     <i class="fas fa-edit"></i> Edit Profile
                 </a>
-
+<!--                <a class="btn-glass">-->
+<!--                    <i class="fas fa-key"></i> Change Password-->
+<!--                </a>-->
                 {% if user.is_authenticated and user.is_superuser %}
                 <a class="btn-glass" href="{% url 'admin:index' %}">Admin panel</a>
                 {% else %}
-                <button type="submit" class="btn-glass" id="toggleAccountBtn" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-user-times"></i>Deactivate Account</button>
+                <button type="submit" class="btn-glass" id="toggleAccountBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-user-times"></i> Deactivate Account
+                </button>
                 {% endif %}
                 <button type="submit" class="btn-glass" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <i class="fas fa-sign-out-alt"></i>Logout
