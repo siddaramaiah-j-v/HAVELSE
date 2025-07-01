@@ -1,0 +1,713 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>HAVELSE - Code Execution Platform</title>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css">-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        * {-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Courier New', Courier, monospace;-->
+<!--            background: linear-gradient(135deg, #FF9A9E 0%,#FF9A9E 100%);-->
+<!--            background-attachment: fixed;-->
+<!--            min-height: 100vh;-->
+<!--            color: #333;-->
+<!--            overflow-x: hidden;-->
+<!--        }-->
+
+<!--        .hero-section {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            text-align: center;-->
+<!--            padding: 4rem 2rem;-->
+<!--            color: white;-->
+<!--            font-weight: bolder;-->
+<!--        }-->
+
+<!--        .hero-section h1 {-->
+<!--            font-size: 3em;-->
+<!--            margin-bottom: 1rem;-->
+<!--            animation: fadeInDown 1s ease-in-out;-->
+<!--            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);-->
+<!--        }-->
+
+<!--        .hero-section p {-->
+<!--            font-size: 1.5em;-->
+<!--            margin-bottom: 2rem;-->
+<!--            animation: fadeInUp 1s ease-in-out;-->
+<!--        }-->
+
+<!--        .controls-section {-->
+<!--            background: rgba(255, 255, 255, 0.95);-->
+<!--            border-radius: 20px;-->
+<!--            padding: 2.5rem;-->
+<!--            margin: 2rem auto;-->
+<!--            max-width: 1200px;-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);-->
+<!--            animation: fadeInUp 1s ease-in-out;-->
+<!--            backdrop-filter: blur(10px);-->
+<!--        }-->
+
+<!--        .language-selector {-->
+<!--            background: white;-->
+<!--            border: 1px solid #ced4da;-->
+<!--            color: #333;-->
+<!--            padding: 10px 16px;-->
+<!--            border-radius: 10px;-->
+<!--            font-size: 14px;-->
+<!--            cursor: pointer;-->
+<!--            transition: all 0.3s ease;-->
+<!--            font-family: 'Courier New', Courier, monospace;-->
+<!--            font-weight: bold;-->
+<!--        }-->
+
+<!--        .language-selector:focus {-->
+<!--            border-color: #1f4037;-->
+<!--            box-shadow: 0 0 5px rgba(31, 64, 55, 0.5);-->
+<!--            outline: none;-->
+<!--        }-->
+
+<!--        .btn-custom {-->
+<!--            border-radius: 12px;-->
+<!--            padding: 12px 24px;-->
+<!--            font-weight: bold;-->
+<!--            font-family: 'Courier New', Courier, monospace;-->
+<!--            transition: all 0.3s ease;-->
+<!--            border: none;-->
+<!--            cursor: pointer;-->
+<!--            font-size: 15px;-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 0.5px;-->
+<!--            min-width: 140px;-->
+<!--            position: relative;-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .btn-custom:before {-->
+<!--            content: '';-->
+<!--            position: absolute;-->
+<!--            top: 0;-->
+<!--            left: -100%;-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);-->
+<!--            transition: left 0.5s;-->
+<!--        }-->
+
+<!--        .btn-custom:hover:before {-->
+<!--            left: 100%;-->
+<!--        }-->
+
+<!--        .btn-run {-->
+<!--            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);-->
+<!--            color: white;-->
+<!--            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);-->
+<!--        }-->
+
+<!--        .btn-run:hover {-->
+<!--            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);-->
+<!--            transform: translateY(-3px);-->
+<!--            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);-->
+<!--        }-->
+
+<!--        .btn-clear {-->
+<!--            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);-->
+<!--            color: white;-->
+<!--            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);-->
+<!--        }-->
+
+<!--        .btn-clear:hover {-->
+<!--            background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);-->
+<!--            transform: translateY(-3px);-->
+<!--            box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);-->
+<!--        }-->
+
+<!--        .editor-card {-->
+<!--            background: rgba(255, 255, 255, 0.95);-->
+<!--            border-radius: 20px;-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);-->
+<!--            margin: 2rem auto;-->
+<!--            max-width: 1200px;-->
+<!--            overflow: hidden;-->
+<!--            transition: transform 0.3s ease, box-shadow 0.3s ease;-->
+<!--            backdrop-filter: blur(10px);-->
+<!--            border: 1px solid rgba(255, 255, 255, 0.2);-->
+<!--        }-->
+
+<!--        .editor-card:hover {-->
+<!--            transform: translateY(-8px);-->
+<!--            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);-->
+<!--        }-->
+
+<!--        .card-header {-->
+<!--            background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);-->
+<!--            color: white;-->
+<!--            padding: 1rem 1.5rem;-->
+<!--            font-weight: bold;-->
+<!--            font-size: 1.1em;-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .stats-info {-->
+<!--            font-size: 0.9em;-->
+<!--            opacity: 0.9;-->
+<!--        }-->
+
+<!--        #editor {-->
+<!--            height: 450px;-->
+<!--            border: none;-->
+<!--        }-->
+
+<!--        .output-card {-->
+<!--            background: rgba(255, 255, 255, 0.95);-->
+<!--            border-radius: 20px;-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);-->
+<!--            margin: 2rem auto;-->
+<!--            max-width: 1200px;-->
+<!--            overflow: hidden;-->
+<!--            transition: transform 0.3s ease, box-shadow 0.3s ease;-->
+<!--            backdrop-filter: blur(10px);-->
+<!--            border: 1px solid rgba(255, 255, 255, 0.2);-->
+<!--        }-->
+
+<!--        .output-card:hover {-->
+<!--            transform: translateY(-8px);-->
+<!--            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);-->
+<!--        }-->
+
+<!--        .output-content {-->
+<!--            padding: 1.5rem;-->
+<!--            background: #f8f9fa;-->
+<!--        }-->
+
+<!--        .execution-info {-->
+<!--            background: rgba(31, 64, 55, 0.1);-->
+<!--            padding: 1rem;-->
+<!--            border-radius: 10px;-->
+<!--            margin-bottom: 1rem;-->
+<!--            border-left: 4px solid #1f4037;-->
+<!--        }-->
+
+<!--        .execution-time {-->
+<!--            color: #666;-->
+<!--            font-size: 0.9em;-->
+<!--            margin-bottom: 0.5rem;-->
+<!--        }-->
+
+<!--        .execution-status {-->
+<!--            font-weight: bold;-->
+<!--            font-size: 1em;-->
+<!--        }-->
+
+<!--        .status-success {-->
+<!--            color: #4CAF50;-->
+<!--        }-->
+
+<!--        .status-error {-->
+<!--            color: #f44336;-->
+<!--        }-->
+
+<!--        .status-running {-->
+<!--            color: #ff9800;-->
+<!--        }-->
+
+<!--        .output-section {-->
+<!--            margin-bottom: 1.5rem;-->
+<!--        }-->
+
+<!--        .output-label {-->
+<!--            color: #1f4037;-->
+<!--            font-size: 0.9em;-->
+<!--            font-weight: bold;-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 1px;-->
+<!--            margin-bottom: 0.5rem;-->
+<!--        }-->
+
+<!--        .output-text {-->
+<!--            background: white;-->
+<!--            padding: 1rem;-->
+<!--            border-radius: 10px;-->
+<!--            border: 1px solid #e0e0e0;-->
+<!--            white-space: pre-wrap;-->
+<!--            font-size: 14px;-->
+<!--            line-height: 1.5;-->
+<!--            min-height: 80px;-->
+<!--            max-height: 300px;-->
+<!--            overflow-y: auto;-->
+<!--            font-family: 'Courier New', monospace;-->
+<!--        }-->
+
+<!--        .error-text {-->
+<!--            color: #f44336;-->
+<!--            border-left: 4px solid #f44336;-->
+<!--            background: #ffebee;-->
+<!--        }-->
+
+<!--        .success-text {-->
+<!--            color: #4CAF50;-->
+<!--            border-left: 4px solid #4CAF50;-->
+<!--            background: #e8f5e8;-->
+<!--        }-->
+
+<!--        .loading-spinner {-->
+<!--            display: inline-block;-->
+<!--            width: 16px;-->
+<!--            height: 16px;-->
+<!--            border: 2px solid rgba(31, 64, 55, 0.3);-->
+<!--            border-radius: 50%;-->
+<!--            border-top-color: #1f4037;-->
+<!--            animation: spin 1s ease-in-out infinite;-->
+<!--            margin-right: 8px;-->
+<!--        }-->
+
+<!--        @keyframes spin {-->
+<!--            to { transform: rotate(360deg); }-->
+<!--        }-->
+
+<!--        @keyframes fadeInDown {-->
+<!--            from {-->
+<!--                opacity: 0;-->
+<!--                transform: translateY(-30px);-->
+<!--            }-->
+<!--            to {-->
+<!--                opacity: 1;-->
+<!--                transform: translateY(0);-->
+<!--            }-->
+<!--        }-->
+
+<!--        @keyframes fadeInUp {-->
+<!--            from {-->
+<!--                opacity: 0;-->
+<!--                transform: translateY(30px);-->
+<!--            }-->
+<!--            to {-->
+<!--                opacity: 1;-->
+<!--                transform: translateY(0);-->
+<!--            }-->
+<!--        }-->
+
+<!--        .footer-section {-->
+<!--            background: rgba(31, 64, 55, 0.95);-->
+<!--            color: white;-->
+<!--            text-align: center;-->
+<!--            padding: 3rem;-->
+<!--            margin-top: 4rem;-->
+<!--            backdrop-filter: blur(10px);-->
+<!--            border-top: 1px solid rgba(255, 255, 255, 0.1);-->
+<!--        }-->
+
+<!--        /* Scroll animations */-->
+<!--        .scroll-animate {-->
+<!--            opacity: 0;-->
+<!--            transform: translateY(30px);-->
+<!--            transition: all 0.6s ease;-->
+<!--        }-->
+
+<!--        .scroll-animate.animate-in {-->
+<!--            opacity: 1;-->
+<!--            transform: translateY(0);-->
+<!--        }-->
+
+<!--        /* Smooth scrolling highlight effect */-->
+<!--        .highlight-console {-->
+<!--            box-shadow: 0 0 20px rgba(31, 64, 55, 0.4) !important;-->
+<!--            transform: scale(1.02) !important;-->
+<!--            transition: all 0.5s ease !important;-->
+<!--        }-->
+
+<!--        /* Custom scrollbar */-->
+<!--        ::-webkit-scrollbar {-->
+<!--            width: 8px;-->
+<!--        }-->
+
+<!--        ::-webkit-scrollbar-track {-->
+<!--            background: rgba(255, 255, 255, 0.1);-->
+<!--        }-->
+
+<!--        ::-webkit-scrollbar-thumb {-->
+<!--            background: rgba(31, 64, 55, 0.5);-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+
+<!--        ::-webkit-scrollbar-thumb:hover {-->
+<!--            background: rgba(31, 64, 55, 0.7);-->
+<!--        }-->
+
+<!--        @media (max-width: 768px) {-->
+<!--            .hero-section h1 {-->
+<!--                font-size: 2em;-->
+<!--            }-->
+
+<!--            .hero-section p {-->
+<!--                font-size: 1.2em;-->
+<!--            }-->
+
+<!--            .controls-section {-->
+<!--                margin: 1rem;-->
+<!--                padding: 1.5rem;-->
+<!--            }-->
+
+<!--            .editor-card, .output-card {-->
+<!--                margin: 1rem;-->
+<!--            }-->
+
+<!--            #editor {-->
+<!--                height: 300px;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="hero-section">-->
+<!--        <h1>HAVELSE Code Platform</h1>-->
+<!--        <p>Write, Execute, and Master Programming Languages</p>-->
+<!--    </div>-->
+
+<!--    <div class="container-fluid">-->
+<!--        <div class="controls-section scroll-animate">-->
+<!--            <div class="row align-items-center justify-content-center">-->
+<!--                <div class="col-lg-3 col-md-6 mb-3">-->
+<!--                    <label for="language-selector" class="form-label" style="color: #1f4037; font-weight: bold;">Choose Language:</label>-->
+<!--                    <select id="language-selector" class="form-select language-selector">-->
+<!--                        <option value="63">JavaScript (Node.js)</option>-->
+<!--                        <option value="71">Python 3</option>-->
+<!--                        <option value="62">Java</option>-->
+<!--                        <option value="54">C++ (GCC 9.2.0)</option>-->
+<!--                        <option value="50">C (GCC 9.2.0)</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <div class="col-lg-6 col-md-6 mb-3 text-center">-->
+<!--                    <div class="d-flex justify-content-center gap-3">-->
+<!--                        <button id="run-btn" class="btn btn-custom btn-run">-->
+<!--                            <span id="run-text">▶ Execute Code</span>-->
+<!--                        </button>-->
+<!--                        <button id="clear-btn" class="btn btn-custom btn-clear">🗑 Clear Output</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-lg-3 col-md-12 mb-3 text-center text-lg-end">-->
+<!--                    <small class="text-muted" style="font-weight: bold;">-->
+<!--                        <strong>💡 Tip:</strong> Ctrl+Enter to run-->
+<!--                    </small>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="editor-card scroll-animate">-->
+<!--            <div class="card-header">-->
+<!--                <span>💻 Code Editor</span>-->
+<!--                <div class="stats-info">-->
+<!--                    <span id="line-count">Lines: 1</span> |-->
+<!--                    <span id="char-count">Characters: 0</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="editor"></div>-->
+<!--        </div>-->
+
+<!--        <div class="output-card scroll-animate" id="execution-console">-->
+<!--            <div class="card-header">-->
+<!--                <span>📋 Execution Console</span>-->
+<!--            </div>-->
+<!--            <div class="output-content">-->
+<!--                <div id="execution-info" class="execution-info" style="display: none;">-->
+<!--                    <div class="execution-time" id="execution-time"></div>-->
+<!--                    <div class="execution-status" id="execution-status"></div>-->
+<!--                </div>-->
+
+<!--                <div class="output-section">-->
+<!--                    <div class="output-label">Program Output</div>-->
+<!--                    <div id="output" class="output-text">Ready to execute your code... Select a language and start coding!</div>-->
+<!--                </div>-->
+
+<!--                <div class="output-section" id="error-section" style="display: none;">-->
+<!--                    <div class="output-label">Error Messages</div>-->
+<!--                    <div id="error-output" class="output-text error-text"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="footer-section">-->
+<!--        <p>&copy; 2025 HAVELSE Code Platform. Empowering developers worldwide.</p>-->
+<!--    </div>-->
+
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>-->
+<!--    <script>-->
+<!--        let editor;-->
+<!--        let currentLanguageId = '63'; // Default to JavaScript-->
+
+<!--        // Language mappings for Monaco Editor-->
+<!--        const languageMap = {-->
+<!--            '63': 'javascript',  // JavaScript (Node.js)-->
+<!--            '71': 'python',      // Python 3-->
+<!--            '62': 'java',        // Java-->
+<!--            '54': 'cpp',         // C++ (GCC 9.2.0)-->
+<!--            '50': 'c',           // C (GCC 9.2.0)-->
+<!--        };-->
+
+<!--        // Hello World code templates-->
+<!--        const helloWorldCode = {-->
+<!--        '63': `// Welcome to HAVELSE Code Platform-->
+<!--                console.log("Hello, World!");-->
+<!--                console.log("Start coding amazing things!");`,-->
+<!--        '71': `# Welcome to HAVELSE Code Platform-->
+<!--                print("Hello, World!")-->
+<!--                print("Start coding amazing things!")`,-->
+<!--        '62': `// Welcome to HAVELSE Code Platform-->
+<!--                public class Main {-->
+<!--                public static void main(String[] args) {-->
+<!--                System.out.println("Hello, World!");-->
+<!--                System.out.println("Start coding amazing things!");-->
+<!--                }-->
+<!--                }`,-->
+<!--        '54': `// Welcome to HAVELSE Code Platform-->
+<!--                #include <iostream>-->
+<!--                using namespace std;-->
+<!--                int main() {-->
+<!--                cout << "Hello, World!" << endl;-->
+<!--                cout << "Start coding amazing things!" << endl;-->
+<!--                return 0;-->
+<!--                }`,-->
+<!--        '50': `// Welcome to HAVELSE Code Platform-->
+<!--                #include <stdio.h>-->
+<!--                int main() {-->
+<!--                printf("Hello, World!\\n");-->
+<!--                printf("Start coding amazing things!\\n");-->
+<!--                return 0;-->
+<!--                }`-->
+<!--                };-->
+
+<!--        // Function to scroll to execution console with smooth animation-->
+<!--        function scrollToExecutionConsole() {-->
+<!--            const consoleElement = document.getElementById('execution-console');-->
+
+<!--            // Add highlight effect-->
+<!--            consoleElement.classList.add('highlight-console');-->
+
+<!--            // Smooth scroll to the console-->
+<!--            consoleElement.scrollIntoView({-->
+<!--                behavior: 'smooth',-->
+<!--                block: 'start',-->
+<!--                inline: 'nearest'-->
+<!--            });-->
+
+<!--            // Remove highlight effect after animation-->
+<!--            setTimeout(() => {-->
+<!--                consoleElement.classList.remove('highlight-console');-->
+<!--            }, 1000);-->
+<!--        }-->
+
+<!--        // Initialize Monaco Editor-->
+<!--        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });-->
+<!--        require(['vs/editor/editor.main'], function () {-->
+<!--            editor = monaco.editor.create(document.getElementById('editor'), {-->
+<!--                value: helloWorldCode['63'],-->
+<!--                language: 'javascript',-->
+<!--                theme: 'vs-light',-->
+<!--                fontSize: 14,-->
+<!--                lineNumbers: 'on',-->
+<!--                roundedSelection: false,-->
+<!--                scrollBeyondLastLine: false,-->
+<!--                automaticLayout: true,-->
+<!--                minimap: { enabled: true },-->
+<!--                wordWrap: 'on',-->
+<!--                lineNumbersMinChars: 3,-->
+<!--                glyphMargin: true,-->
+<!--                folding: true,-->
+<!--                links: true,-->
+<!--                colorDecorators: true,-->
+<!--                cursorBlinking: 'blink',-->
+<!--                cursorStyle: 'line',-->
+<!--                renderWhitespace: 'selection',-->
+<!--                fontFamily: 'Courier New, monospace'-->
+<!--            });-->
+
+<!--            // Update stats on content change-->
+<!--            editor.onDidChangeModelContent(() => {-->
+<!--                updateStats();-->
+<!--            });-->
+
+<!--            updateStats();-->
+<!--        });-->
+
+<!--        // Language change handler-->
+<!--        document.getElementById('language-selector').addEventListener('change', (e) => {-->
+<!--            currentLanguageId = e.target.value;-->
+<!--            const monacoLanguage = languageMap[currentLanguageId];-->
+
+<!--            if (monacoLanguage) {-->
+<!--                monaco.editor.setModelLanguage(editor.getModel(), monacoLanguage);-->
+<!--            }-->
+
+<!--            // Load template code for the selected language-->
+<!--            if (helloWorldCode[currentLanguageId]) {-->
+<!--                editor.setValue(helloWorldCode[currentLanguageId]);-->
+<!--            }-->
+<!--        });-->
+
+<!--        // Execute code using Judge0 API-->
+<!--        async function executeCode() {-->
+<!--            const code = editor.getValue();-->
+
+<!--            if (!code.trim()) {-->
+<!--                showOutput('⚠️ No code to execute. Please write some code first!', 'error');-->
+<!--                scrollToExecutionConsole(); // Scroll to show the warning-->
+<!--                return;-->
+<!--            }-->
+
+<!--            // Scroll to execution console immediately when execution starts-->
+<!--            scrollToExecutionConsole();-->
+
+<!--            showExecutionStatus('running', 'Submitting code for execution...');-->
+
+<!--            // Disable the run button during execution-->
+<!--            const runBtn = document.getElementById('run-btn');-->
+<!--            runBtn.disabled = true;-->
+
+<!--            try {-->
+<!--                // Submit code for execution-->
+<!--                const submissionResponse = await fetch('exe/', {-->
+<!--                    method: 'POST',-->
+<!--                    headers: {-->
+<!--                        'Content-Type': 'application/json'-->
+<!--                    },-->
+<!--                    body: JSON.stringify({-->
+<!--                        language_id: parseInt(currentLanguageId),-->
+<!--                        source_code: code,-->
+<!--                        stdin: ""-->
+<!--                    })-->
+<!--                });-->
+
+<!--                if (!submissionResponse.ok) {-->
+<!--                    throw new Error(`HTTP error! status: ${submissionResponse.status}`);-->
+<!--                }-->
+
+<!--                const result = await submissionResponse.json();-->
+<!--                displayResult(result);-->
+
+<!--            } catch (error) {-->
+<!--                console.error('Execution error:', error);-->
+<!--                showError('❌ Failed to execute code: ' + error.message);-->
+<!--                showExecutionStatus('error', 'Execution failed');-->
+<!--            } finally {-->
+<!--                // Re-enable the run button-->
+<!--                runBtn.disabled = false;-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Display execution result-->
+<!--        function displayResult(result) {-->
+<!--            const status = result.status;-->
+<!--            const output = result.stdout || '';-->
+<!--            const error = result.stderr || result.compile_output || '';-->
+
+<!--            // Clear previous error display-->
+<!--            document.getElementById('error-section').style.display = 'none';-->
+
+<!--            if (status.id === 3) {-->
+<!--                // Accepted (successful execution)-->
+<!--                showOutput(output || '✅ Code executed successfully (no output generated)', 'success');-->
+<!--                showExecutionStatus('success', `✅ Executed successfully (${result.time || '0.0'}s, ${result.memory || '0'}KB)`);-->
+<!--            } else {-->
+<!--                // Error occurred-->
+<!--                showOutput(output || '⚠️ No output generated', 'success');-->
+<!--                if (error) {-->
+<!--                    showError(error);-->
+<!--                }-->
+<!--                showExecutionStatus('error', `❌ ${status.description}`);-->
+<!--            }-->
+<!--        }-->
+
+<!--        function showOutput(text, type = 'success') {-->
+<!--            const outputEl = document.getElementById('output');-->
+<!--            outputEl.textContent = text;-->
+<!--            outputEl.className = `output-text ${type === 'success' ? 'success-text' : ''}`;-->
+<!--        }-->
+
+<!--        function showError(error) {-->
+<!--            const errorSection = document.getElementById('error-section');-->
+<!--            const errorOutput = document.getElementById('error-output');-->
+<!--            errorOutput.textContent = error;-->
+<!--            errorSection.style.display = 'block';-->
+<!--        }-->
+
+<!--        function showExecutionStatus(status, message) {-->
+<!--            const infoEl = document.getElementById('execution-info');-->
+<!--            const statusEl = document.getElementById('execution-status');-->
+<!--            const timeEl = document.getElementById('execution-time');-->
+
+<!--            infoEl.style.display = 'block';-->
+<!--            timeEl.textContent = `⏰ ${new Date().toLocaleTimeString()}`;-->
+<!--            statusEl.textContent = message;-->
+<!--            statusEl.className = `execution-status status-${status}`;-->
+
+<!--            if (status === 'running') {-->
+<!--                statusEl.innerHTML = '<span class="loading-spinner"></span>' + message;-->
+<!--            }-->
+<!--        }-->
+
+<!--        function updateStats() {-->
+<!--            const content = editor.getValue();-->
+<!--            const lines = content.split('\n').length;-->
+<!--            const chars = content.length;-->
+
+<!--            document.getElementById('line-count').textContent = `Lines: ${lines}`;-->
+<!--            document.getElementById('char-count').textContent = `Characters: ${chars}`;-->
+<!--        }-->
+
+<!--        function clearOutput() {-->
+<!--            document.getElementById('output').textContent = 'Output cleared. Ready for next execution!';-->
+<!--            document.getElementById('output').className = 'output-text';-->
+<!--            document.getElementById('error-section').style.display = 'none';-->
+<!--            document.getElementById('execution-info').style.display = 'none';-->
+<!--        }-->
+
+<!--        // Event listeners-->
+<!--        document.getElementById('run-btn').addEventListener('click', executeCode);-->
+<!--        document.getElementById('clear-btn').addEventListener('click', clearOutput);-->
+
+<!--        // Keyboard shortcuts-->
+<!--        document.addEventListener('keydown', (e) => {-->
+<!--            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {-->
+<!--                e.preventDefault();-->
+<!--                executeCode();-->
+<!--            }-->
+<!--        });-->
+
+<!--        // Scroll animation observer-->
+<!--        const observeElements = () => {-->
+<!--            const observer = new IntersectionObserver((entries) => {-->
+<!--                entries.forEach(entry => {-->
+<!--                    if (entry.isIntersecting) {-->
+<!--                        entry.target.classList.add('animate-in');-->
+<!--                    }-->
+<!--                });-->
+<!--            }, {-->
+<!--                threshold: 0.1,-->
+<!--                rootMargin: '0px 0px -50px 0px'-->
+<!--            });-->
+
+<!--            document.querySelectorAll('.scroll-animate').forEach(el => {-->
+<!--                observer.observe(el);-->
+<!--            });-->
+<!--        };-->
+
+<!--        // Initialize animations and welcome message-->
+<!--        setTimeout(() => {-->
+<!--            observeElements();-->
+<!--            showOutput('🚀 Welcome to HAVELSE Code Platform!\n\nFeatures:\n• Multiple programming languages\n• Real-time code execution\n• Beautiful, responsive interface\n• Keyboard shortcuts (Ctrl+Enter)\n• Auto-scroll to results\n• Smooth scrolling experience\n\nStart coding now!', 'success');-->
+<!--        }, 100);-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->

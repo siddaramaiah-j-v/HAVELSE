@@ -1,0 +1,240 @@
+{% extends 'learn/base.html' %}
+{% load static %}
+{% block title %}HAVELSE - YouTube Tutorials{% endblock %}
+{% block style %}
+/* Hero section for tutorials page */
+.tutorial-hero-section {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 8rem;
+    margin-bottom: 2rem;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+
+
+.btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    margin-top:0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.accordion-button {
+    background: transparent;
+    color: white;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease;
+}
+.tutorial-hero-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1s ease-in-out;
+}
+
+.tutorial-hero-section p {
+    font-size: 1.2em;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Tutorials section */
+.tutorials-container {
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin: 2rem auto;
+    max-width: 1200px;
+}
+
+.video-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 15px;
+}
+
+.video-info {
+    padding: 1.5rem;
+}
+
+.video-title {
+    font-weight: bold;
+    color: #1f4037;
+    margin-bottom: 0.5rem;
+}
+
+.video-description {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.video-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.video-tag {
+    background-color: #e9f5e9;
+    color: #4CAF50;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Category filter */
+.category-filters {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.filter-btn {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    margin: 0.3rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    color: #1f4037;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: #1f4037 !important;
+    color: white;
+}
+
+/* Animation keyframes */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+{% endblock %}
+{% block content %}
+<!-- Tutorial Hero Section -->
+<div class="tutorial-hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <form action="{% url 'learn:search' %}" method="POST" class="d-flex">
+                        {% csrf_token %}
+                    <div class="input-group mb-3 mx-auto" style="width:50%;">
+                        <input type="text" class="form-control" name="query" placeholder="search here">
+                        <button class="fas fa-search btn" type="submit" id="button-addon2"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <h1>YouTube Tutorials</h1>
+    <p>Learn programming with our curated collection of tutorials</p>
+    </div>
+</div>
+
+<!-- Category Filter Section -->
+<div class="container">
+    <div class="category-filters">
+        {% for item in languages %}
+        <a href="{% url 'learn:video' %}?slug={{course.slug}}&l_name={{item.language}}" class="filter-btn text-decoration-none">{{ item.language }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Tutorials Content -->
+<div class="tutorials-container container">
+    <!-- Videos page 1 (will be toggled via pagination) -->
+    <div class="videos-page" id="page1">
+        <div class="row">
+            <!-- Video 1 -->
+            {% for play in playlist %}
+            <div class="col-lg-6 col-md-12">
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/videoseries?list={{play.list_id}}" title="YouTube playlist player" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ course.title }}</h3>
+                        <div id="videoInfo">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{play.id}}">
+                            more..
+                            <i class="fas fa-question-circle me-3"></i>
+                        </button>
+                        <div id="collapse{{play.id}}" class="collapse" data-bs-parent="#videoInfo">
+                        <p class="video-description">{{ course.description }}</p>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

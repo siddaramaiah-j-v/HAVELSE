@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAVELSE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #437064 0%, #437064 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            opacity: 0.1;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+            animation: wave 15s infinite linear;
+            -webkit-animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+            will-change: transform, opacity;
+            transform: translateZ(0);
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            -webkit-animation-delay: -5s;
+            opacity: 0.05;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            -webkit-animation-delay: -10s;
+            opacity: 0.07;
+        }
+
+
+        @-webkit-keyframes wave {
+            from { -webkit-transform: rotate(0deg) scale(1.5); }
+            to { -webkit-transform: rotate(360deg) scale(1.5); }
+          }
+
+        @keyframes wave {
+            from { transform: rotate(0deg) scale(1.5); }
+            to { transform: rotate(360deg) scale(1.5); }
+        }
+
+
+        /* Glassmorphism Base */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            margin: 0 auto;
+            width: 95%;
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 0 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 1s ease forwards;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 1s ease 0.3s forwards;
+        }
+        @keyframes -webkit-slideUp {
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0);
+            }
+        }
+
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        /* Buttons */
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-glass:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        /* Feature Cards */
+        .features-section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-card h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            filter: brightness(1.2);
+        }
+
+        /* Counter Section */
+        .counter-section {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 2rem 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .counter-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .counter-number {
+            font-size: 4rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .counter-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Testimonials Carousel */
+        .testimonials-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius:20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0;
+        }
+
+        .carousel-item {
+            padding: 3rem 2rem;
+        }
+
+        .testimonial-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            color: white;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 5rem 0;
+        }
+
+        .faq-title {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .accordion-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px !important;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            background: transparent;
+            color: white;
+            font-weight: 500;
+            border: none;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: none;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .accordion-body {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+
+        }
+
+        /* Footer */
+        .footer {
+            background:  rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+            color: white;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.8));
+            transform-origin: 0 50%;
+            transform: scaleX(0);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+
+            .feature-card {
+                margin-bottom: 2rem;
+            }
+
+            .counter-number {
+                font-size: 3rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #437064 0%, #437064 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">HAVELSE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Signup</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1 class="hero-title">Learn Smarter, Code Faster, Without Distractions!</h1>
+        <p class="hero-subtitle">Empowering learners with a distraction-free platform featuring curated educational content, interactive coding, and AI-powered assistance for seamless learning.</p>
+        <a href="#features" class="btn-glass">Explore Features</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h5>
+                            Ad-Free Learning
+                            &nbsp; &nbsp;<img class="rounded" src="{% static 'users/images/idea.gif'%}" width="40px" height="40px" alt="">
+                        </h5>
+                        <p>Enjoy a distraction-free learning experience with high-quality content curated just for you.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h5>Multi-Language Support
+                        &nbsp; &nbsp;<img class="rounded" src="{% static 'users/images/social-media.gif'%}" width="40px" height="40px" alt="">
+                        </h5>
+                        <p>Learn in English, Kannada, Telugu, or Hindi from your favorite educators around the world.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h5>AI-Powered Doubt Solving
+                        &nbsp; &nbsp;<img class="rounded" src="{% static 'users/images/artificial-intelligence.gif'%}" width="40px" height="40px" alt="">
+                        </h5>
+                        <p>Get instant solutions to your doubts with our advanced AI-powered assistance system.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counter Section -->
+    <section class="container">
+        <div class="counter-section">
+            <span class="counter-number" id="counter">0</span>
+            <span class="counter-number">+</span>
+            <div class="counter-text">Hours of Content</div>
+            <div class="mt-4">
+                <a href="#start" class="btn-glass">Get Started For Free</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">"HAVELSE has transformed the way I learn. The content is top-notch and the platform is incredibly intuitive to use."</p>
+                            <p class="testimonial-author">- Shiva Kumar</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">"The AI-powered doubt solving feature is absolutely revolutionary. I can't imagine learning without HAVELSE now!"</p>
+                            <p class="testimonial-author">- Punith</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">"Multi-language support makes learning so much more accessible. This platform truly understands global learners."</p>
+                            <p class="testimonial-author">- Abhishek</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                            <i class="fas fa-question-circle me-3"></i>
+                            What is HAVELSE?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            HAVELSE is a cutting-edge platform dedicated to providing high-quality, distraction-free learning experiences with AI-powered assistance.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            <i class="fas fa-user-plus me-3"></i>
+                            How can I get started?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Simply sign up for a free account and start exploring our comprehensive learning features immediately.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                            <i class="fas fa-mobile-alt me-3"></i>
+                            Is there a mobile app?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our platform is fully responsive and optimized for all devices. A dedicated mobile app is coming soon!
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                            <i class="fas fa-language me-3"></i>
+                            What languages are supported?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            HAVELSE supports multiple languages including English, Kannada, Telugu, and Hindi for inclusive learning.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                            <i class="fas fa-robot me-3"></i>
+                            How does AI-powered doubt solving work?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our advanced AI algorithms analyze your questions and provide instant, personalized solutions to accelerate your learning journey.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h5>HAVELSE</h5>
+                    <p>Empowering learners worldwide with premium, distraction-free education and cutting-edge AI technology.</p>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255, 255, 255, 0.2);">
+            <p class="mb-0">&copy; 2025 HAVELSE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = document.querySelector('.scroll-progress');
+            const scrolled = (scroll / height) * 100;
+            progress.style.transform = `scaleX(${scrolled / 100})`;
+        });
+
+        // Counter Animation
+        function animateCounter(target, duration) {
+            let start = 0;
+            const end = parseInt(target);
+            const increment = end / (duration / 16);
+            const counter = document.getElementById('counter');
+
+            function updateCounter() {
+                start += increment;
+                if (start >= end) {
+                    counter.textContent = end;
+                    return;
+                }
+                counter.textContent = Math.floor(start);
+                requestAnimationFrame(updateCounter);
+            }
+
+            updateCounter();
+        }
+
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.querySelector('#counter')) {
+                        animateCounter(1000, 2500);
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const counterSection = document.querySelector('.counter-section');
+            if (counterSection) {
+                observer.observe(counterSection);
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Enhanced navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.15)';
+                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.2)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.1)';
+                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Add hover effects to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+                card.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.2)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+                card.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            });
+        });
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+
+            type();
+        }
+
+        // Initialize typing effect after loading
+        setTimeout(() => {
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 50);
+            }
+        }, 1500);
+
+        // Add tilt effect to glassmorphism elements
+        document.querySelectorAll('.feature-card, .testimonial-content').forEach(element => {
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+
+                element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+
+        // Smooth reveal animation for sections
+        const revealElements = document.querySelectorAll('.feature-card, .counter-section, .testimonial-content');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Initialize reveal animations
+        document.addEventListener('DOMContentLoaded', () => {
+            revealElements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(50px)';
+                element.style.transition = 'all 0.8s ease';
+                revealObserver.observe(element);
+            });
+        });
+
+        // Enhanced button click effects
+        document.querySelectorAll('.btn-glass').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+
+                btn.style.position = 'relative';
+                btn.style.overflow = 'hidden';
+                btn.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

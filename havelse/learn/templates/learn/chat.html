@@ -1,0 +1,366 @@
+{% extends 'learn/base.html' %}
+{% load static %}
+{% block title %}HAVELSE - Gemini Assistant{% endblock %}
+{% block style %}
+        /* Gemini Assistant Specific Styles */
+        .gemini-header {
+            position: relative;
+            z-index: 10;
+            opacity: 1 !important;
+            visibility: visible !important;
+            margin-top: 8rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bolder;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-bottom: 5rem;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .gemini-message {
+            background-color: #E6E6FA;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-input-container {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 0;
+        }
+
+        .message-input {
+            border-radius: 20px;
+            padding-right: 3.5rem;
+            border: 1px solid #ced4da;
+            overflow: hidden;
+            min-height: 45px;
+            max-height: 200px;
+            transition: border-color 0.3s;
+            z-index: 1;
+        }
+
+        .message-input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0 !important;
+            margin-top:2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 2;
+            pointer-events: auto;
+        }
+
+        .send-button:hover {
+            background-color: #1f4037;
+
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background-color: #E6E6FA;
+            padding: 8px 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #777;
+            margin-right: 3px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features-container {
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #25705c;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 12px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border-radius: 5px;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+{% endblock %}
+{% block content %}
+<!-- Gemini Assistant Header -->
+<div class="container">
+    <div class="gemini-header">
+        <h2>Your AI-powered coding companion</h2>
+    </div>
+
+    <!-- Chat Interface -->
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message gemini-message">
+                    <p>Hello! I'm Gemini, your AI coding assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <div class="message-input-container">
+                <form id="messageForm" novalidate>
+                    {% csrf_token %}
+                    <div class="input-group position-relative">
+                        <textarea class="form-control message-input pe-5" id="userMessage" placeholder="Ask me anything about coding..." required></textarea>
+                        <button type="submit" class="send-button" style="bottom: 8px; right: 10px;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- Features Section -->
+<div class="features-container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="feature-item text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h4>Code Assistance</h4>
+                <p>Get help with coding problems, debugging, and best practices across multiple programming languages.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-item text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h4>Learning Suggestions</h4>
+                <p>Receive personalized learning paths and resources based on your coding interests and skill level.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-item text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h4>Documentation Lookup</h4>
+                <p>Quickly access simplified explanations of functions, methods, and concepts from various programming languages.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block script %}
+document.addEventListener('DOMContentLoaded', function() {
+    const messageForm = document.getElementById('messageForm');
+    const userMessageInput = document.getElementById('userMessage');
+    const chatMessages = document.getElementById('chatMessages');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    // Get CSRF token
+    function getCSRFToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue || '';
+    }
+
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const userMessage = userMessageInput.value.trim();
+        if (!userMessage) return;
+
+        // Add user message to chat
+        addMessage(userMessage, 'user');
+        userMessageInput.value = '';
+
+        // Show typing indicator
+        typingIndicator.style.display = 'block';
+
+        // Send message to backend
+        sendMessageToBackend(userMessage);
+    });
+
+    function addMessage(content, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+
+        if (sender === 'user') {
+            messageDiv.classList.add('user-message');
+            messageDiv.innerHTML = `<p>${content}</p>`;
+        } else {
+            messageDiv.classList.add('gemini-message');
+            // For Gemini messages, use the processed content that includes formatted code blocks
+            messageDiv.innerHTML = content;
+        }
+
+        chatMessages.appendChild(messageDiv);
+
+        // Scroll to the bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessageToBackend(message) {
+        // Real AJAX request to Django backend
+        fetch('api/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({ message: message }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Hide typing indicator
+            typingIndicator.style.display = 'none';
+
+            if (data.success) {
+                // Add Gemini's response to chat - use processed_message for formatted code blocks
+                addMessage(data.processed_message || data.message, 'gemini');
+            } else {
+                addMessage("I'm having trouble processing your request. Please try again later.", 'gemini');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            typingIndicator.style.display = 'none';
+            addMessage("Sorry, there was an error connecting to the server. Please try again.", 'gemini');
+        });
+    }
+});
+{% endblock %}

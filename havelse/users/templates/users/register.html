@@ -1,0 +1,164 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block title %}Signup{% endblock %}
+{% block content %}
+<div class="login-container">
+<h1 class="brand-title">HAVELSE</h1>
+<form id="regForm" method='POST' novalidate>
+  {% csrf_token %}
+    {{ form.non_field_errors }}
+    <label for="usernameStatus" class="form-label">Username</label>
+    <small class="error-messages" id="usernameStatus">
+    {% if form.username.errors %}
+    {{ form.username.errors.0 }}
+    {% endif %}
+    </small>
+    {{ form.username }}
+
+
+    <label for="phoneStatus" class="form-label">Phone</label>
+    <small class="text-danger" id="phoneStatus">
+    {% if form.phone.errors %}
+    {{ form.phone.errors.0 }}
+    {% endif %}
+    </small>
+    {{ form.phone }}
+
+    <label for="emailStatus" class="form-label">Email</label>
+    <small class="text-danger" id="emailStatus">
+    {% if form.email.errors %}
+    {{ form.email.errors.0 }}
+    {% endif %}
+    </small>
+    {{ form.email }}
+
+
+    <label for="password1Error" class="form-label">Password</label>
+    <small class="text-danger" id="password1Error">
+    {% if form.password1.errors %}
+    {{ form.password1.errors.0 }}
+    {% endif %}
+    </small>
+    <div style="position: relative;">
+        {{ form.password1 }}
+        <img id="togglePassword1" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
+    </div>
+
+    <label for="passwordError" class="form-label">Confirm Password</label>
+    <small class="text-danger" id="passwordError">
+    {% if form.password2.errors %}
+    {{ form.password2.errors.0 }}
+    {% endif %}
+    </small>
+    <div style="position: relative;">
+        {{ form.password2 }}
+        <img id="togglePassword2" src="{% static 'users/images/hidden.png' %}" alt="eye" width="20px" height="20px" class="password-toggle">
+    </div>
+    <button type="submit" class="loginbtn">Signup</button>
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+        {% endif %}
+    {% if messages %}
+    <div class="messages">
+    {% for message in messages %}
+        <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+    </div>
+{% endif %}
+    </form>
+<div class="footer">
+    <p><b>Already have an account?</b> <a href="{% url 'login' %}"><b>Login</b></a></p>
+</div>
+</div>
+<script src="{% static 'users/js/script.js' %}"></script>
+ <script>
+     document.addEventListener("DOMContentLoaded", () => {
+  // Debounce function to limit API calls
+  function debounce(func, delay) {
+    let timer;
+    return function(...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+
+  // Username validation with debounce
+  const usernameInput = document.getElementById("username");
+  const usernameStatus = document.getElementById("usernameStatus");
+
+  const validateUsername = debounce((username) => {
+    if (username.length > 3 && username.length < 10) {
+      fetch(`/ajax/check-username/?username=${username}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.exists) {
+            usernameStatus.textContent = "Username taken";
+            usernameStatus.style.color = "red"; // Red for taken username
+          } else {
+            usernameStatus.textContent = "Username available";
+            usernameStatus.style.color = "green"; // Green for available username
+          }
+        });
+    } else {
+      usernameStatus.textContent = "Username must be 4-9 characters.";
+      usernameStatus.style.color = "red"; // Reset to default color
+    }
+  }, 500); // 500ms debounce delay
+
+  usernameInput.addEventListener("input", () => {
+    const username = usernameInput.value;
+    validateUsername(username);
+  });
+
+  // Email validation with debounce
+  const emailInput = document.getElementById("email");
+  const emailStatus = document.getElementById("emailStatus");
+
+  const validateEmail = debounce((email) => {
+    if (email) { // Only make the request if there's an email value
+      fetch(`/ajax/check-email/?email=${email}`)
+        .then(res => res.json())
+        .then(data => {
+          emailStatus.textContent = data.exists ? "Email already in use" : "";
+          emailStatus.style.color = data.exists ? "red" : ""; // Red for taken email
+        });
+    } else {
+      emailStatus.textContent = "";
+    }
+  }, 500); // 500ms debounce delay
+
+  emailInput.addEventListener("input", () => {
+    const email = emailInput.value;
+    validateEmail(email);
+  });
+
+  // Phone validation with debounce
+  const phoneInput = document.getElementById("phone");
+  const phoneStatus = document.getElementById("phoneStatus");
+  const phoneRegex = /^(?:\+91[\-\s]?|0)?[6-9]\d{9}$/;
+
+  const validatePhone = debounce((phone) => {
+    if (phoneRegex.test(phone)) {
+      fetch(`/ajax/check-phone/?phone=${phone}`)
+        .then(res => res.json())
+        .then(data => {
+          phoneStatus.textContent = data.exists ? "Phone number already registered" : "";
+          phoneStatus.style.color = data.exists ? "red" : ""; // Red for taken phone
+        });
+    } else {
+      phoneStatus.textContent = phone ? "Enter a valid number" : "";
+      phoneStatus.style.color = phone ? "red" : ""; // Red for invalid phone
+    }
+  }, 500); // 500ms debounce delay
+
+  phoneInput.addEventListener("input", () => {
+    const phone = phoneInput.value.trim();
+    validatePhone(phone);
+  });
+});
+</script>
+{% endblock %}

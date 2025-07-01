@@ -1,0 +1,266 @@
+{% extends 'learn/base.html' %}
+{% load static %}
+{% block title %}HAVELSE - YouTube Tutorials{% endblock %}
+{% block style %}
+.btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    margin-top:0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Hero section for tutorials page */
+.tutorial-hero-section {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 8rem;
+    margin-bottom: 2rem;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+
+.tutorial-hero-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1s ease-in-out;
+}
+
+.tutorial-hero-section p {
+    font-size: 1.2em;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Tutorials section */
+.tutorials-container {
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin: 2rem auto;
+    max-width: 1200px;
+}
+
+.video-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 15px;
+}
+
+.video-info {
+    padding: 1.5rem;
+}
+
+.video-title {
+    font-weight: bold;
+    color: #1f4037;
+    margin-bottom: 0.5rem;
+}
+
+.video-description {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.video-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.video-tag {
+    background-color: #e9f5e9;
+    color: #4CAF50;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Pagination styling */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+}
+.page-link {
+    color: white;
+    border:none;
+    box-shadow:none;
+    background-color:transparent;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.page-item.active .page-link {
+    background-color: #4CAF50;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animation keyframes */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+{% endblock %}
+{% block content %}
+    <!-- Tutorial Hero Section -->
+<div class="tutorial-hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <form action="{% url 'learn:search' %}" method="POST">
+                        {% csrf_token %}
+                    <div class="input-group mb-3 mx-auto" style="width: 50%;">
+                        <input type="text" class="form-control" name="query" placeholder="search here">
+                        <button class="fas fa-search btn" type="submit" id="button-addon2"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <h1>YouTube Tutorials</h1>
+    <p>Learn programming with our curated collection of tutorials</p>
+    </div>
+</div>
+
+<!-- Tutorials Content -->
+<div class="tutorials-container container">
+    <!-- Videos page 1 (will be toggled via pagination) -->
+    <div class="videos-page" id="page1">
+        <div class="row">
+            {% if data %}
+            {% for video in data %}
+            <div class="col-lg-6 col-md-12">
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/{{video.id}}?rel=0" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                        <div id="videoInfo">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{video.id}}">
+                            more..
+                            </button>
+                            <div id="collapse{{video.id}}" class="collapse" data-bs-parent="#videoInfo">
+                                <p class="video-description">{{ video.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12">
+                <div class="video-card">
+                    <p class="video-title">Error occured while loading....Try again</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="pagination-container container">
+    <div class="row">
+        <div class="col">
+        <nav aria-label="navigation">
+            <ul class="pagination">
+                {% if data.has_previous %}
+                <li class="page-item">
+                 <a class="page-link" href="?page={{data.previous_page_number}}" aria-label="Previous">
+                     <span aria-hidden="true">&laquo;</span>
+                 </a>
+                 </li>
+                {% endif %}
+                {% for num in data.paginator.page_range %}
+                {% if data.number == num %}
+                <li class="page-item active"><a class="page-link rounded-circle" href="?page={{num}}">{{num}}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link rounded-circle" href="?page={{num}}">{{num}}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if data.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{data.next_page_number}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+                </li>
+                {% endif %}
+          </ul>
+        </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

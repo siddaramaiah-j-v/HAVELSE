@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'learn/css/main.css' %}">
+  <style>
+      {% block style %}
+      {% endblock %}
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="blur-layer"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+        {% if not hide_nav %}
+        <nav class="navbar navbar-expand-lg fixed-top" id="hideNav">
+            <div class="container">
+            <a class="navbar-brand" href="{% url 'learn:home' %}">HAVELSE</a>
+            <!-- Toggle navbar for mobile-->
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link p-2 m-2" href="{% url 'learn:topics' %}">Topics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-2 m-2" href="{% url 'learn:code' %}">Code Editor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-2 m-2" href="{% url 'learn:chat' %}">Gemini Assistant</a>
+                    </li>
+                    <li class="nav-item">
+                        <a target="_blank" class="nav-link p-2 m-2" href="https://placementdrive.in/links?fbclid=PAZXh0bgNhZW0CMTEAAabL1EuN4zIc9V0YgCyHf6O5ytVIEuH1jqAABe5G32OYE9smKh2Y3xpt2U4_aem_0cBPoTAWkG_YZpzwfWAwyg#google_vignette">Internship/Jobs</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <span class="navbar-text text-dark p-2 m-2 d-none d-lg-block">
+                        {% if user.is_authenticated %}
+                            Welcome, {{ user.username }}
+                        {% else %}
+                            Welcome, Guest
+                        {% endif %}
+                    </span>
+                <li class="nav-item">
+                    <button class="nav-link profile my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
+                        <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='learn/images/profile.png';" alt="profile" height="40px" width="40px" class="rounded-circle">
+                    </button>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    {% endif %}
+###########################################################################################################
+
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+     <div class="profile-container">
+        <div class="profile-modal modal-content">
+            <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px; z-index: 10;"></button>
+            <div class="profile-header">
+                <div class="profile-image-container">
+                    <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='learn/images/profile.png';" alt="Profile Picture" class="profile-image" id="profileImage">
+                    <div class="status-badge status-verified" id="statusBadge">
+                        <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
+                    </div>
+                </div>
+                <h1 class="profile-name" id="profileName">{% if user.profile.name %}{{ user.profile.name }}{% else %}Set your name{% endif %}</h1>
+                <p class="profile-username" id="profileUsername">@{{ user.username }}</p>
+                <p class="profile-bio" id="profileBio">{% if user.profile.bio %}{{ user.profile.bio }}{% else %}update your bio..!{% endif %}</p>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value" id="profileEmail">{{ user.email }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Phone</div>
+                        <div class="detail-value" id="profilePhone">(+91) {{ user.profile.phone }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="fas fa-venus-mars"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Gender</div>
+                        <div class="detail-value" id="profileGender">
+                           {{ user.profile.gender }} <i class="fas fa-mars gender-icon" style="color: #1f4037;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Member Since</div>
+                        <div class="detail-value" id="profileJoinDate">{{ user.date_joined }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a class="btn-glass" href="{% url 'users:edit' %}">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+<!--                <a class="btn-glass">-->
+<!--                    <i class="fas fa-key"></i> Change Password-->
+<!--                </a>-->
+                {% if user.is_authenticated and user.is_superuser %}
+                <a class="btn-glass" href="{% url 'admin:index' %}">Admin panel</a>
+                {% else %}
+                <button type="submit" class="btn-glass" id="toggleAccountBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-user-times"></i> Deactivate Account
+                </button>
+                {% endif %}
+                <button type="submit" class="btn-glass" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt"></i>Logout
+                </button>
+            </div>
+        </div>
+    </div>
+      </div>
+    </div>
+
+    ###########################################################################################################
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="deleteAccountForm">
+        <div class="modal-body">
+          <!-- Error messages container -->
+          <div id="errorContainer" class="d-none">
+            <div class="alert alert-danger" id="errorMessage"></div>
+          </div>
+
+          <!-- Success message container -->
+          <div id="successContainer" class="d-none">
+            <div class="alert alert-success" id="successMessage"></div>
+          </div>
+
+          <p>Please enter your password to deactivate your account.</p>
+          <input type="password" id="passwordField" name="password" class="form-control" placeholder="Password" required>
+          <small class="text-muted">By deactivating your account, the account will be deleted if you don't login for 10 days.</small>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-warning" id="deactivateBtn">
+            <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner" role="status" aria-hidden="true"></span>
+            Deactivate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Logout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to log out?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+              {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Logout</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% block content %} {% endblock %}
+    <!-- Footer Section -->
+<footer class="footer mt-5 py-4" style="background-color: #1f4037; color: white;">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4 text-center">
+                <h5>About</h5><hr class="footer-title w-25 mx-auto">
+                <p style="color: rgba(255, 255, 255, 0.8);">Havelse is your go-to platform for learning programming languages, solving coding challenges, and exploring tutorials. Join us to enhance your coding skills!</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-4 mb-4 text-center">
+                <h5>Quick Links</h5><hr class="footer-title w-25 mx-auto">
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'learn:topics' %}" class="footer-links">Topics</a></li>
+                    <li><a href="{% url 'learn:chat' %}" class="footer-links">Gemini Assistant</a></li>
+                    <li><a href="{% url 'learn:code' %}" class="footer-links">Code Editor</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-md-4 mb-4 text-center">
+                <h5>Contact Us</h5><hr class="footer-title w-25 mx-auto">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i>support@havelse.com</li>
+                    <li><i class="fas fa-phone me-2"></i>+91 6362390292</li>
+                    <li><i class="fas fa-map-marker-alt me-2"></i>123 Coding Street, Bengaluru Tech City</li>
+                </ul>
+                <!-- Social Media Icons -->
+                <div class="social-links mt-3">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="copyright">
+            <p>&copy; 2025 HAVELSE. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+    <script src="{% static 'learn/js/script.js' %}"></script>
+    <script>{% block script %} {% endblock %}</script>
+</body>
+</html>

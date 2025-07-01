@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaf0f9;
+            color: #333;
+            line-height: 1.6;
+            padding-top: 56px; /* For fixed navbar */
+        }
+
+        /* Scrollspy styling */
+        .nav-link {
+            color: #fff;
+            border-radius: 0;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #ff9800;
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background-color: #4CAF50 !important;
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        /* Navbar styling */
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f4037 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            margin: 0 auto;
+            width: 95%;
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 0 0;
+        }
+
+        /* Sidebar scrollspy */
+        .sidebar {
+            position: sticky;
+            top: 76px;
+            height: calc(100vh - 76px);
+            background-color: #333;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar .nav-link {
+            padding: 10px 15px;
+            color: #fff;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #444;
+            border-left: 4px solid #ff9800;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #333 !important;
+            border-left: 4px solid #4CAF50 !important;
+        }
+
+        .sidebar h5 {
+            color: #ff9800;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-pills .nav-link {
+            border-radius: 0;
+        }
+
+        /* Content styling */
+        .python-header {
+            background-color: #1f4037;
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+
+        section:hover {
+            transform: scale(1.01);
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #ff9800;
+            font-size: 1.5rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .code {
+            background-color: #f0f4c3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: #333;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            top: 56px;
+            width: 100%;
+            height: 4px;
+            background: #ccc;
+            z-index: 1020;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #4CAF50;
+            width: 0%;
+        }
+
+        /* Make section headers visible when scrolled to */
+        section {
+            scroll-margin-top: 70px;
+        }
+
+        /* Utility classes */
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .py-lg-5 {
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="70">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'learn:home' %}">HAVELSE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Progress bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="python-header">
+        <div class="container">
+            <h1>{{ course.subtitle }}</h1>
+            <p class="lead text-white">Learn {{course.title}} from scratch with this step-by-step guide</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar with scrollspy -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <h5>Contents</h5>
+                    <nav id="navbar-example3" class="nav nav-pills flex-column">
+                        {% for section in sections %}
+                        <a class="nav-link" href="#{{section.slug}}">{{ section.title }}</a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col-lg-9 py-lg-5">
+                {% for section in sections %}
+                <section id="{{section.slug}}">
+                    {{ section.content | safe }}
+                </section>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+<footer class="footer mt-5 py-4" style="background-color: #1f4037; color: white;">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-6 mb-6 text-center">
+                <h5>About</h5><hr class="w-25 mx-auto">
+                <p>Havelse is your go-to platform for learning programming languages, solving coding challenges, and exploring tutorials. Join us to enhance your coding skills!</p>
+            </div>
+            <!-- Contact Info -->
+            <div class="col-md-6 mb-6 text-center">
+                <h5>Contact Us</h5><hr class="w-25 mx-auto">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i>support@havelse.com</li>
+                    <li><i class="fas fa-phone me-2"></i>+91 6362390292</li>
+                    <li><i class="fas fa-map-marker-alt me-2"></i>123 Coding Street, Bengaluru Tech City</li>
+                </ul>
+                <!-- Social Media Icons -->
+                <div class="mt-3">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-center mt-4 pt-3 border-top">
+            <p class="mb-0">&copy; 2025 HAVELSE. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Progress bar
+window.onscroll = function() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("myBar").style.width = scrolled + "%";
+};
+
+// Enable Bootstrap tooltips
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            // Add offset for fixed navbar
+            const offset = 70;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+
+            // Update active class in sidebar
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.sidebar .nav-link[href="${targetId}"]`).classList.add('active');
+        }
+    });
+});
+
+// Handle mobile navigation collapse after click
+const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+const menuToggle = document.getElementById('navbarNav');
+const bsCollapse = bootstrap.Collapse.getInstance(menuToggle);
+
+navLinks.forEach(l => {
+    l.addEventListener('click', () => {
+        if (window.innerWidth < 992 && bsCollapse) {
+            bsCollapse.toggle();
+        }
+    });
+});
+
+// Code copy functionality
+document.querySelectorAll('.code').forEach(codeBlock => {
+    // Create copy button
+    const copyButton = document.createElement('button');
+    copyButton.className = 'btn btn-sm btn-outline-success copy-btn';
+    copyButton.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+    copyButton.style.position = 'absolute';
+    copyButton.style.top = '5px';
+    copyButton.style.right = '5px';
+    copyButton.style.opacity = '0.7';
+
+    // Set position relative on code block for absolute positioning of button
+    codeBlock.style.position = 'relative';
+
+    // Add button to code block
+    codeBlock.appendChild(copyButton);
+
+    // Add copy functionality
+    copyButton.addEventListener('click', () => {
+        const codeText = codeBlock.innerText.replace('Copy', '').trim();
+        navigator.clipboard.writeText(codeText).then(() => {
+            copyButton.innerHTML = '<i class="bi bi-check2"></i> Copied!';
+            setTimeout(() => {
+                copyButton.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+            }, 2000);
+        });
+    });
+});
+
+// Add syntax highlighting effect (simplified version)
+document.querySelectorAll('.code').forEach(codeBlock => {
+    const text = codeBlock.innerHTML;
+
+    // Simple syntax highlighting for Python keywords
+    const keywords = ['def', 'if', 'else', 'elif', 'for', 'while', 'in', 'return', 'print', 'range', 'True', 'False'];
+    let highlightedText = text;
+
+    keywords.forEach(keyword => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+        highlightedText = highlightedText.replace(regex, `<span style="color: #0066cc; font-weight: bold;">${keyword}</span>`);
+    });
+
+    // Highlight strings
+    highlightedText = highlightedText.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, '<span style="color: #008800;">$&</span>');
+
+    // Highlight comments
+    highlightedText = highlightedText.replace(/(#.*)$/gm, '<span style="color: #888888;">$1</span>');
+
+    codeBlock.innerHTML = highlightedText;
+});
+
+// Add interactive quiz at the end of each section
+function createQuiz() {
+    const quizContainer = document.createElement('div');
+    quizContainer.className = 'quiz-container mt-4 p-3 border rounded bg-light';
+    quizContainer.innerHTML = `
+        <h4 class="text-primary"><i class="bi bi-question-diamond-fill me-2"></i>Quick Check</h4>
+        <div class="quiz-question mb-3">
+            <p><strong>What statement is used to display output in Python?</strong></p>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="q1" id="q1a" value="console.log()">
+                <label class="form-check-label" for="q1a">console.log()</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="q1" id="q1b" value="echo">
+                <label class="form-check-label" for="q1b">echo</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="q1" id="q1c" value="print()">
+                <label class="form-check-label" for="q1c">print()</label>
+            </div>
+        </div>
+        <button class="btn btn-success btn-sm check-answer">Check Answer</button>
+        <div class="answer-feedback mt-2" style="display: none;"></div>
+    `;
+
+    // Add quiz after the Getting Started section
+    const gettingStartedSection = document.getElementById('getting-started');
+    gettingStartedSection.appendChild(quizContainer);
+
+    // Handle quiz submission
+    const checkButton = quizContainer.querySelector('.check-answer');
+    const feedback = quizContainer.querySelector('.answer-feedback');
+
+    checkButton.addEventListener('click', () => {
+        const selectedAnswer = quizContainer.querySelector('input[name="q1"]:checked');
+
+        if (!selectedAnswer) {
+            feedback.innerHTML = '<div class="alert alert-warning">Please select an answer!</div>';
+            feedback.style.display = 'block';
+            return;
+        }
+
+        if (selectedAnswer.value === 'print()') {
+            feedback.innerHTML = '<div class="alert alert-success">Correct! The print() function is used to display output in Python.</div>';
+        } else {
+            feedback.innerHTML = '<div class="alert alert-danger">Incorrect. The correct answer is print().</div>';
+        }
+
+        feedback.style.display = 'block';
+    });
+}
+
+// Initialize the quiz when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    createQuiz();
+
+    // Activate the first sidebar link by default
+    const firstLink = document.querySelector('.sidebar .nav-link');
+    if (firstLink) {
+        firstLink.classList.add('active');
+    }
+
+    // Add a "Back to Top" button
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.innerHTML = '<i class="bi bi-arrow-up-circle-fill"></i>';
+    backToTopBtn.className = 'btn btn-success btn-floating';
+    backToTopBtn.id = 'btn-back-to-top';
+    backToTopBtn.style.position = 'fixed';
+    backToTopBtn.style.bottom = '20px';
+    backToTopBtn.style.right = '20px';
+    backToTopBtn.style.display = 'none';
+    backToTopBtn.style.zIndex = '99';
+    backToTopBtn.style.borderRadius = '50%';
+    backToTopBtn.style.width = '40px';
+    backToTopBtn.style.height = '40px';
+
+    document.body.appendChild(backToTopBtn);
+
+    // Show/hide the button based on scroll position
+    window.onscroll = function() {
+        scrollFunction();
+
+        // Update progress bar (keeping original functionality)
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("myBar").style.width = scrolled + "%";
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            backToTopBtn.style.display = 'block';
+        } else {
+            backToTopBtn.style.display = 'none';
+        }
+    }
+
+    // Scroll to top when button is clicked
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Add dark mode toggle
+    const navbar = document.querySelector('.navbar .container');
+    const darkModeToggle = document.createElement('div');
+    darkModeToggle.className = 'ms-auto d-flex align-items-center';
+    darkModeToggle.innerHTML = `
+        <div class="form-check form-switch ms-3">
+            <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+            <label class="form-check-label" for="darkModeSwitch"><i class="bi bi-moon"></i></label>
+        </div>
+    `;
+
+    navbar.appendChild(darkModeToggle);
+
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
+    darkModeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+        }
+    });
+
+    // Add dark mode styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .dark-mode {
+            background-color: #1a1a1a !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .navbar,
+        .dark-mode section,
+        .dark-mode .card {
+            background-color: #2a2a2a !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .code {
+            background-color: #333 !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode h2,
+        .dark-mode h3 {
+            color: #7cb342 !important;
+        }
+    `;
+    document.head.appendChild(style);
+});
+   </script>
+</body>
+</html>
