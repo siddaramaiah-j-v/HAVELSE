@@ -138,10 +138,9 @@ body {
     -webkit-backdrop-filter: blur(10px);
 }
 
-.profile{
-width:40px;
+.profile {
+    width:40px;
 }
-
 
 
 
@@ -568,6 +567,8 @@ width:40px;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     color: white;
 }
+
+
 
 
 .btn-danger {
