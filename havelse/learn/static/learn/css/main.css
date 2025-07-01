@@ -138,8 +138,25 @@ body {
     -webkit-backdrop-filter: blur(10px);
 }
 
-.profile {
-    width:40px;
+.profile-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #1f4037;
+    padding: 1rem 1rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    text-align: center;
 }
 
 
@@ -323,26 +340,13 @@ body {
 
 @media (min-width: 992px) {
   #hideNav {
-    position: absolute;
+    position: fixed;
     top: 20px;
     transition: all 0.3s ease;
     /* Force Hardware Acceleration in WebKit */
     transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-  }
-   #hideNav.is-fixed {
-    /* when the user scrolls down, we hide the header right above the viewport */
-    position: fixed;
-    top: -83px;
-    left: 0;
-    right: 0;
-    transition: transform 0.3s;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  #hideNav.is-visible {
-    /* if the user changes the scrolling direction, we show the header */
-    transform: translate3d(0, 103px, 0);
   }
   }
 
@@ -351,7 +355,7 @@ body {
     .navbar {
         width: calc(100% - 20px);
     }
-    .profile{
+    .profile-button {
     width:40px;
     }
 }
@@ -386,7 +390,7 @@ body {
     .main-content {
         padding-top: 80px;
     }
-    .profile{
+    .profile-button {
         width:40px;
     }
     .hero-title {
@@ -421,7 +425,7 @@ body {
     .profile-name {
         font-size: 1.8rem;
     }
-    .profile {
+    .profile-button {
         width:40px;
     }
     .profile-image {
@@ -480,7 +484,7 @@ body {
         padding-top: 70px;
     }
 
-    .profile {
+    .profile-button {
         width:40px;
     }
 
@@ -533,7 +537,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     padding: 0.8rem 2rem;
-    border-radius: 50px;
+    border-radius: 50%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     font-weight: 600;
     text-decoration: none;

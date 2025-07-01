@@ -23,7 +23,7 @@
         <div class="wave"></div>
     </div>
         {% if not hide_nav %}
-        <nav class="navbar navbar-expand-lg fixed-top" id="hideNav">
+        <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
             <a class="navbar-brand" href="{% url 'learn:home' %}">HAVELSE</a>
             <!-- Toggle navbar for mobile-->
@@ -54,7 +54,7 @@
                         {% endif %}
                     </span>
                 <li class="nav-item">
-                    <button class="nav-link profile my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
+                    <button class="profile-button my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
                         <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='{% static 'learn/images/profile.png' %}';" alt="profile" height="40px" width="40px" class="rounded-circle">
                     </button>
                 </li>
