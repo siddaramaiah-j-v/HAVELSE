@@ -56,11 +56,7 @@
                     </span>
                 <li class="nav-item">
                     <button class="profile-button my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        {% if user.profile.image %}
-                        <img src="{{ user.profile.image.url }}" alt="profile" height="40px" width="40px" class="rounded-circle">
-                        {% else %}
                         <img src="{% static 'learn/images/profile.png' %}" alt="profile" height="40px" width="40px" class="rounded-circle">
-                        {% endif %}
                     </button>
                 </li>
                 </ul>
@@ -77,11 +73,7 @@
             <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px; z-index: 10;"></button>
             <div class="profile-header">
                 <div class="profile-image-container">
-                    {% if user.profile.image %}
-                    <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="profile-image" id="profileImage">
-                    {% else %}
                     <img src="{% static 'learn/images/profile.png' %}" alt="Profile Picture" class="profile-image" id="profileImage">
-                    {% endif %}
                     <div class="status-badge status-verified" id="statusBadge">
                         <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
                     </div>
