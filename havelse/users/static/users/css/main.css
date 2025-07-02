@@ -31,7 +31,7 @@ body {
     -webkit-animation: fadeIn 1s ease-in-out;
 }
 
-@keyframes -webkit-fadeIn {
+@-webkit-keyframes fadeIn {
     from {
         opacity: 0;
         -webkit-transform: translateY(-20px);
@@ -60,6 +60,9 @@ body {
             padding: 0.8rem 1rem !important;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
 .form-control::placeholder {

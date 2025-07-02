@@ -630,6 +630,9 @@ body {
     padding: 0.8rem 1rem !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .form-control::placeholder {
