@@ -45,6 +45,7 @@
                         <a target="_blank" class="nav-link p-2 m-2" href="https://placementdrive.in/links?fbclid=PAZXh0bgNhZW0CMTEAAabL1EuN4zIc9V0YgCyHf6O5ytVIEuH1jqAABe5G32OYE9smKh2Y3xpt2U4_aem_0cBPoTAWkG_YZpzwfWAwyg#google_vignette">Internship/Jobs</a>
                     </li>
                 </ul>
+                {% if show_profile %}
                 <ul class="navbar-nav ms-auto">
                     <span class="navbar-text text-dark p-2 m-2 d-none d-lg-block">
                         {% if user.is_authenticated %}
@@ -55,10 +56,15 @@
                     </span>
                 <li class="nav-item">
                     <button class="profile-button my-2 p-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='{% static 'learn/images/profile.png' %}';" alt="profile" height="40px" width="40px" class="rounded-circle">
+                        {% if user.profile.image %}
+                        <img src="{{ user.profile.image.url }}" alt="profile" height="40px" width="40px" class="rounded-circle">
+                        {% else %}
+                        <img src="{% static 'learn/images/profile.png' %}" alt="profile" height="40px" width="40px" class="rounded-circle">
+                        {% endif %}
                     </button>
                 </li>
                 </ul>
+                {% endif %}
             </div>
             </div>
         </nav>
@@ -71,7 +77,11 @@
             <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px; z-index: 10;"></button>
             <div class="profile-header">
                 <div class="profile-image-container">
-                    <img src="{{ user.profile.image.url }}" onerror="this.onerror=null; this.src='{% static 'learn/images/profile.png' %}';" alt="Profile Picture" class="profile-image" id="profileImage">
+                    {% if user.profile.image %}
+                    <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="profile-image" id="profileImage">
+                    {% else %}
+                    <img src="{% static 'learn/images/profile.png' %}" alt="Profile Picture" class="profile-image" id="profileImage">
+                    {% endif %}
                     <div class="status-badge status-verified" id="statusBadge">
                         <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
                     </div>

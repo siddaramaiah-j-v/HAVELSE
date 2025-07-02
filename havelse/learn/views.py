@@ -16,7 +16,7 @@ URL="https://www.googleapis.com/youtube/v3/search"
 
 @login_required
 def home(request):
-    return render(request,'learn/home.html')
+    return render(request,'learn/home.html',{'show_profile':True})
 
 @login_required
 def topics(request):
