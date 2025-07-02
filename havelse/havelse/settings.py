@@ -151,7 +151,7 @@ LOGIN_URL='login'
 LOGIN_REDIRECT_URL='learn:home'
 LOGOUT_REDIRECT_URL='users:index'
 
-MEDIA_ROOT=os.path.join(BASE_DIR,'pictures/')
+MEDIA_ROOT=os.path.join(BASE_DIR,'pictures')
 MEDIA_URL='/pictures/'
 
 
