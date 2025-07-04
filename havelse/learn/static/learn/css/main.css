@@ -623,10 +623,10 @@ body {
 
 
 .form-control {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 12px !important;
-    color: white !important;
+    color: #0a0a0a !important;
     padding: 0.8rem 1rem !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -636,19 +636,19 @@ body {
 }
 
 .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: #0a0a0a !important;
 }
 
 .form-control:focus {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
     box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
-    color: white !important;
+    color: #0a0a0a !important;
 }
 
 .form-label{
     font-weight: 500;
-    color:#f7faf9;
+    color: #1a1a1a;
     margin-bottom: 0.5rem;
 }
 
