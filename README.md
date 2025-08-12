@@ -1,4 +1,4 @@
-# Distraction Free Learning Platform-Havelse 📚 
+# 📚 Havelse - Distraction Free Learning Platform 
 
 A comprehensive web-based platform designed for focused programming education through YouTube tutorials, articles, and interactive coding challenges. Features AI-powered doubt resolution and an integrated coding environment for seamless hands-on learning.
 
@@ -45,7 +45,7 @@ Node.js >= 14.0 (for frontend dependencies)
 
 ```bash
 git clone https://github.com/siddaramaiah-j-v/HAVELSE.git
-cd E_learn
+cd havelse
 ```
 
 ### Backend Setup
